@@ -83,6 +83,8 @@ async function fetchNews() {
         const data = await response.json();
         const articles = data.contents;
 
+        console.log('microCMSから取得したデータ:', articles);
+
         // "Loading..."を削除
         newsList.innerHTML = ''; 
 
