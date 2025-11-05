@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('V-CLos Site Initialized.');
 
-    // 1. ファーストビューの背景フェードアウト (既存のコード)
-    setupHeroFadeOut();
+    // 1. スクロール効果 (ヒーローフェードアウト & メイン背景フェードイン)
+    setupScrollEffects();
 
     // 2. セクションのフェードイン (既存のコード)
     setupSectionFadeIn();
@@ -11,29 +11,51 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetchNews();
 });
 
-// ----------------------------------------------------
-// 1. ファーストビューの背景画像をスクロールでフェードアウト
-// (処理を関数化)
-// ----------------------------------------------------
-function setupHeroFadeOut() {
+function setupScrollEffects() {
+    // 【変更なし】ヒーロー背景（1枚目）の要素
     const heroBackground = document.querySelector('.hero-background');
     const heroSection = document.getElementById('hero');
+    
+    // 【追加】メイン背景（2枚目）の要素
+    const mainBackground = document.getElementById('main-background');
 
-    if (heroBackground && heroSection) {
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const heroHeight = heroSection.offsetHeight;
+    if (!heroSection || !mainBackground) return; // 要素がない場合は何もしない
+
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        const heroHeight = heroSection.offsetHeight; // heroセクションの高さ
+
+        // ---------------------------------
+        // (A) ヒーロー背景（1枚目）のフェードアウト (既存の処理)
+        // ---------------------------------
+        if (heroBackground) {
             const fadeStart = 0;
-            const fadeEnd = heroHeight * 0.7;
+            const fadeEnd = heroHeight * 0.7; // 70%スクロールで消える
             let opacity = 1;
             if (scrollY > fadeStart) {
                 opacity = 1 - ((scrollY - fadeStart) / (fadeEnd - fadeStart));
             }
             heroBackground.style.opacity = Math.max(0, opacity);
-        });
-    }
-}
+        }
 
+        // ---------------------------------
+        // (B) メイン背景（2枚目）のフェードイン (【追加】の処理)
+        // ---------------------------------
+        
+        // ヒーローの40%地点からフェードイン開始
+        const fadeInStart = heroHeight * 0.4; 
+        // ヒーローの90%地点でフェードイン完了
+        const fadeInEnd = heroHeight * 0.9; 
+
+        let mainOpacity = 0;
+        if (scrollY > fadeInStart) {
+            mainOpacity = (scrollY - fadeInStart) / (fadeInEnd - fadeInStart);
+        }
+        
+        // 0未満、1超過にならないよう制限
+        mainBackground.style.opacity = Math.max(0, Math.min(1, mainOpacity));
+    });
+}
 // ----------------------------------------------------
 // 2. スクロールによるセクションのフェードインアニメーション
 // (処理を関数化)
