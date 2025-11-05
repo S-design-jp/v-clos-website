@@ -2,7 +2,7 @@
 :root {
     --sidebar-width: 220px; /* サイドバーの幅を変数で管理 */
     --font-logo: 'futura-pt', 'Arial Black', sans-serif; /* ロゴフォント */
-    --font-base: 'Helvetica Neue', 'Arial', sans-serif; /* 基本フォント */
+    --font-base: 'futura-pt', 'Arial', sans-serif; /* 基本フォント */
     --color-bg: #000000;
     --color-text: #FFFFFF;
     --color-accent: #AAAAAA; /* ホバー時などのアクセント色 */
