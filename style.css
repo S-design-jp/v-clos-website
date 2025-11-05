@@ -144,6 +144,20 @@ a:hover {
     z-index: -1; 
 }
 
+.hero-logo {
+    /* font-family, font-size などテキスト専用の指定は削除 */
+
+    /* 画像の幅を指定します（例: 400px） */
+    width: 400px;
+
+    /* 画面が狭いときに、はみ出さないようにする */
+    max-width: 90%; 
+
+    /* 縦横比を維持して高さを自動調整 */
+    height: auto; 
+
+    margin: 0;
+}
 /* ヒーローの文字コンテンツ */
 .hero-content {
     position: relative;
