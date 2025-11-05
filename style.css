@@ -166,9 +166,7 @@ a:hover {
     opacity: 0.6;
     animation: bounce 2s infinite;
     
-    /* ▼▼▼ これが最重要 ▼▼▼ */
     z-index: 1; /* 背景(-1)よりも手前に表示 */
-    /* ▲▲▲ ▲▲▲ ▲▲▲ */
 }
 
 /* 矢印のアニメーション（既存） */
