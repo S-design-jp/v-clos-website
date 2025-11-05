@@ -273,6 +273,8 @@ footer {
     padding-left: calc(var(--sidebar-width) + 40px); /* サイドバー分を考慮 */
     text-align: center;
     background-color: #050505; /* フッターの背景をわずかに変える */
+    position:relative;
+    z-index: 0;
 }
 
 .footer-logo {
