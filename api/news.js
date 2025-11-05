@@ -12,7 +12,7 @@ export default async function handler(request, response) {
   }
 
   // microCMSにリクエストするURL (トップページ用の3件取得)
-  const endpoint = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/news?limit=3`;
+  const endpoint = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/news?limit=3&fields=title,summary,publishedAt`;
 
   try {
     // VercelサーバーがmicroCMSにリクエスト
