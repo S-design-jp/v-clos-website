@@ -252,16 +252,20 @@ async function fetchEventsList() {
             const card = document.createElement('a');
             card.href = `live-detail.html?id=${event.id}`;
             card.className = 'event-card';
-
             const formattedDate = formatDate(event.date); 
-            
             const imageUrl = event.thumbnail 
                              ? event.thumbnail.url 
                              : (event.mainImage ? event.mainImage.url : '/image/default-event.jpg');
             card.innerHTML = `
                 <img src="${imageUrl}" alt="${event.title}" class="event-card-image">
                 <div class="event-card-content">
+                    <div class="event-card-meta">
+                        <span class="event-card-date">${formattedDate}</span>
+                        ${event.series ? `<span class="event-tag">${event.series}</span>` : ''}
+                        ${event.status ? `<span class="event-tag">${event.status}</span>` : ''}
                     </div>
+                    <h3 class="event-card-title">${event.title}</h3>
+                </div>
             `;
             listContainer.appendChild(card);
         });
