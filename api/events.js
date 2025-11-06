@@ -18,7 +18,7 @@ export default async function handler(request, response) {
     // ------------------------------------
     // 2. Event page
     // ------------------------------------
-    query = `?limit=100&fields=title,series,date,status,mainImage,venue,id`;
+    query = `?limit=100&fields=title,series,date,status,mainImage,venue,id,thumbnail`;
 
   } else {
     // ------------------------------------
