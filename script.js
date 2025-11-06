@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // (A) For top pages
     if (document.getElementById('news-list')) {
         fetchTopPageNews();
-        // ここにトップページ用イベント取得も追加
+        fetchTopPageEvents();
         // fetchTopPageEvents(); 
     }
 
@@ -323,6 +323,55 @@ async function fetchEventDetail() {
     }
 }
 
+// ----------------------------------------------------
+// 3-F. Fetch Events (For Top Page / index.html)
+// (【新規追加】)
+// ----------------------------------------------------
+async function fetchTopPageEvents() {
+    const eventListTop = document.getElementById('event-list-top');
+    if (!eventListTop) return;
+
+    // API側で limit=3 がデフォルト
+    const endpoint = '/api/events'; 
+
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+
+        const data = await response.json();
+        const events = data.contents;
+
+        eventListTop.innerHTML = ''; // "Loading..."を削除
+
+        if (events.length === 0) {
+            eventListTop.innerHTML = '<li>現在、予定されているイベントはありません。</li>';
+            return;
+        }
+
+        // NEWS欄と似たレイアウトでイベントを表示
+        events.forEach(event => {
+            const li = document.createElement('li');
+            const formattedDate = formatDate(event.date); // 既存の便利関数を流用
+
+            // live.htmlで使ったタグ(.event-tag)もここで再利用します
+            li.innerHTML = `
+                <a href="live-detail.html?id=${event.id}" class="news-link">
+                    <span class="news-date">${formattedDate}</span>
+                    <div class="event-card-meta" style="margin-bottom: 10px;">
+                        ${event.series ? `<span class="event-tag">${event.series}</span>` : ''}
+                        ${event.status ? `<span class="event-tag">${event.status}</span>` : ''}
+                    </div>
+                    <span class="news-title">${event.title}</span>
+                </a>
+            `;
+            eventListTop.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error('Failed to fetch top page events:', error);
+        eventListTop.innerHTML = '<li>イベントの読み込みに失敗しました。</li>';
+    }
+}
 
 // ----------------------------------------------------
 // Utility: Date format function
