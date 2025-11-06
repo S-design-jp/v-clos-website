@@ -705,6 +705,29 @@ footer {
 }
 
 /* ------------------------------
+ * Overlay (For Mobile Menu)
+ * ------------------------------ */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); 
+    
+    z-index: 999; 
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ------------------------------
  * Responsive (For Mobile)
  * ------------------------------ */
 

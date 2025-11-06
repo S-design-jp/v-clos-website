@@ -371,18 +371,25 @@ async function fetchTopPageEvents() {
 
 // ----------------------------------------------------
 // 4. Mobile Menu Toggle
-// (【新規追加】)
 // ----------------------------------------------------
 function setupMenuToggle() {
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay'); 
 
-    // ボタンがHTMLに存在する場合のみ実行
-    if (menuToggle && sidebar) {
+    if (menuToggle && sidebar && overlay) {
+        
         menuToggle.addEventListener('click', () => {
-            // .is-open クラスをボタンとサイドバーに付け外しする
             menuToggle.classList.toggle('is-open');
             sidebar.classList.toggle('is-open');
+            overlay.classList.toggle('is-open'); 
+        });
+
+
+        overlay.addEventListener('click', () => {
+            menuToggle.classList.remove('is-open'); 
+            sidebar.classList.remove('is-open'); 
+            overlay.classList.remove('is-open'); 
         });
     }
 }
