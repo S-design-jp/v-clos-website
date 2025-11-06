@@ -1,7 +1,7 @@
 :root {
     --sidebar-width: 220px; 
-    --font-logo: 'futura-pt', 'Arial Black', sans-serif; 
-    --font-base: 'futura-pt', 'Arial', sans-serif; 
+    --font-logo: 'futura-pt', 'source-han-sans-jp', 'Arial Black', sans-serif;
+    --font-base: 'futura-pt', 'source-han-sans-jp',  'Hiragino Kaku Gothic ProN','Meiryo', sans-serif; /* sans-serifがいれば安心だ!!*/
     --color-bg: #000000;
     --color-text: #FFFFFF;
     --color-accent: #AAAAAA; 
