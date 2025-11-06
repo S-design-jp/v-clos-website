@@ -356,11 +356,17 @@ a:hover {
  * News Article Page (news-detail.html)
  * ------------------------------ */
 
-.article-header {
-    padding-top: 100px;
-    padding-bottom: 60px;
+#article-content-wrapper {
+    padding-top: 0; 
 }
 
+.article-header-main {
+    max-width: 840px; 
+    margin: 0 auto;  
+    padding-top: 100px; 
+    padding-bottom: 60px; 
+    box-sizing: border-box; 
+}
 #article-title {
     font-family: var(--font-logo);
     font-size: 2.8rem; 
@@ -375,26 +381,25 @@ a:hover {
     border: none;
     border-top: 1px solid #333;
     margin-top: 40px; 
-    margin-bottom: 20px;
+    margin-bottom: 0; 
 }
 
 .article-date {
     font-size: 1rem;
     color: var(--color-accent);
     letter-spacing: 1px;
-    margin: 0; 
+    margin: 0;
+    margin-bottom: 20px; 
 }
 
 /* ------------------------------
- * News main content (microCMS Litch editor)
+ * Article Main text (microCMS rich editor)
  * ------------------------------ */
-
-#article-content-wrapper {
-    padding-top: 60px;
-}
-
 .article-body {
-    max-width: 800px;
+    max-width: 840px; 
+    margin: 0 auto;  
+    padding-bottom: 100px; 
+    box-sizing: border-box; 
 }
 
 .article-body h1,
@@ -428,14 +433,16 @@ a:hover {
 }
 
 .article-body img {
-    max-width: 100%;
+    max-width: 100%; 
+    width: 100%;     
     height: auto;
-    margin: 2em 0; 
+    margin: 2em 0;
 }
+
 .article-body ul,
 .article-body ol {
     font-size: 1.1rem; 
-    line-height: 2.0;  
+    line-height: 2.0;
     margin-bottom: 2em;
     padding-left: 1.5em;
 }
