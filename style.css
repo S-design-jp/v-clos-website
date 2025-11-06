@@ -570,6 +570,69 @@ a:hover {
 }
 
 /* ------------------------------
+ * MEDIA Page (media.html)
+ * ------------------------------ */
+.media-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-width: 900px; 
+    margin: 0 auto; 
+}
+
+.media-list li {
+    margin-bottom: 30px;
+}
+
+.media-link-card {
+    display: flex; 
+    align-items: center;
+    background-color: #050505;
+    border: 1px solid #222;
+    padding: 30px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.media-link-card:hover {
+    background-color: #111;
+    transform: scale(1.02);
+    opacity: 1; 
+}
+
+.media-icon {
+    font-family: var(--font-logo);
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-accent);
+    min-width: 80px; 
+    text-align: center;
+    margin-right: 30px;
+}
+/* (もし画像アイコンを使いたい場合は、.media-icon を <img> に変更してください) */
+
+.media-link-content h3 {
+    font-family: var(--font-logo);
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+}
+
+.media-link-content p {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 0 10px 0;
+    opacity: 0.9;
+}
+
+.media-link-url {
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    letter-spacing: 0.5px;
+}
+
+/* ------------------------------
  * Footer(footer)
  * ------------------------------ */
 footer {
