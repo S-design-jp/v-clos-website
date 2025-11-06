@@ -1,11 +1,10 @@
-/* グローバルリセットと基本設定 */
 :root {
-    --sidebar-width: 220px; /* サイドバーの幅を変数で管理 */
-    --font-logo: 'futura-pt', 'Arial Black', sans-serif; /* ロゴフォント */
-    --font-base: 'futura-pt', 'Arial', sans-serif; /* 基本フォント */
+    --sidebar-width: 220px; 
+    --font-logo: 'futura-pt', 'Arial Black', sans-serif; 
+    --font-base: 'futura-pt', 'Arial', sans-serif; 
     --color-bg: #000000;
     --color-text: #FFFFFF;
-    --color-accent: #AAAAAA; /* ホバー時などのアクセント色 */
+    --color-accent: #AAAAAA; 
 }
 
 body {
@@ -14,7 +13,7 @@ body {
     font-family: var(--font-base);
     background-color: var(--color-bg);
     color: var(--color-text);
-    -webkit-font-smoothing: antialiased; /* フォントのアンチエイリアスを調整 */
+    -webkit-font-smoothing: antialiased; 
     -moz-osx-font-smoothing: grayscale;
 }
 
@@ -30,7 +29,7 @@ a:hover {
 }
 
 /* ------------------------------
- * サイドバー (#sidebar)
+ * (#sidebar)
  * ------------------------------ */
 #sidebar {
     position: fixed;
@@ -39,12 +38,12 @@ a:hover {
     width: var(--sidebar-width);
     height: 100vh;
     background-color: var(--color-bg);
-    border-right: 1px solid #333; /* 境界線 */
+    border-right: 1px solid #333; 
     z-index: 1000;
     display: flex;
     flex-direction: column;
     padding: 40px;
-    box-sizing: border-box; /* paddingを含めて幅を計算 */
+    box-sizing: border-box; 
 }
 
 .sidebar-logo {
@@ -68,12 +67,12 @@ a:hover {
 .sidebar-nav a {
     font-size: 1rem;
     font-weight: 500;
-    letter-spacing: 1.5px; /* 字間を広げて無機質感を演出 */
-    text-transform: uppercase; /* 大文字化 */
+    letter-spacing: 1.5px; 
+    text-transform: uppercase; 
 }
 
 .sidebar-social {
-    margin-top: auto; /* 下部に固定 */
+    margin-top: auto; 
     font-size: 0.9rem;
 }
 .sidebar-social a {
@@ -81,7 +80,7 @@ a:hover {
 }
 
 /* ------------------------------
- * メインコンテンツ (#main-content)
+ * Main content (#main-content)
  * ------------------------------ */
 #main-content {
     padding-left: var(--sidebar-width);
@@ -89,10 +88,6 @@ a:hover {
     isolation: isolate; 
 }
 
-
-/* ------------------------------
- * 【追加】新しい固定背景
- * ------------------------------ */
 #main-background {
     position: fixed; 
     top: 0;
@@ -100,7 +95,7 @@ a:hover {
     width: calc(100% - var(--sidebar-width));
     height: 100vh;
     
-    /* !!! 2枚目の背景画像のパスを設定 !!! */
+    /* !!! 2枚目の背景画像 !!! */
     background-image: url('/image/IMG_2753.jpg');
     background-size: cover;
     background-position: center;
@@ -114,7 +109,7 @@ a:hover {
 
 
 /* ------------------------------
- * ヒーローセクション (#hero)
+ * Hero(#hero)
  * ------------------------------ */
 #hero {
     position: relative; 
@@ -128,14 +123,13 @@ a:hover {
     z-index: 0;
 }
 
-/* ヒーロー背景画像 (1枚目) */
 .hero-background {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 1枚目の画像パス（既存の設定） */
+    /* !!! 1枚目の背景画像 !!! */
     background-image: url('/image/IMG_9143.jpg'); 
     background-size: cover;
     background-position: center;
@@ -145,45 +139,38 @@ a:hover {
 }
 
 .hero-logo {
-    /* font-family, font-size などテキスト専用の指定は削除 */
 
-    /* 画像の幅を指定します（例: 400px） */
     width: 400px;
 
-    /* 画面が狭いときに、はみ出さないようにする */
     max-width: 90%; 
 
-    /* 縦横比を維持して高さを自動調整 */
     height: auto; 
 
     margin: 0;
 }
-/* ヒーローの文字コンテンツ */
+/* Hero text */
 .hero-content {
     position: relative;
     z-index: 1; 
 }
-/* スクロールダウン矢印のアニメーション */
+/* Scroll down arrow */
 .scroll-down-arrow {
     position: absolute;
     bottom: 40px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;  /* 矢印の幅 */
-    height: 20px; /* 矢印の高さ */
+    width: 20px;  
+    height: 20px; 
     
-    /* ▼▼▼ 矢印を描画する線 ▼▼▼ */
     border-left: 2px solid var(--color-text);
     border-bottom: 2px solid var(--color-text);
-    /* ▲▲▲ ▲▲▲ ▲▲▲ ▲▲▲ */
     
     opacity: 0.6;
     animation: bounce 2s infinite;
     
-    z-index: 1; /* 背景(-1)よりも手前に表示 */
+    z-index: 1; 
 }
 
-/* 矢印のアニメーション（既存） */
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateX(-50%) translateY(0) rotate(-45deg);
@@ -197,26 +184,20 @@ a:hover {
 }
 
 
-/* ------------------------------
- * 後続コンテンツセクション
- * ------------------------------ */
 .content-section {
     padding: 100px 80px; 
     border-bottom: 1px solid #222; 
     
-    /* アニメーション用（既存の設定） */
     opacity: 0; 
     transform: translateY(20px); 
     transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
 
-    /* 背景を透けさせるための設定 */
     position: relative; 
     z-index: 0;
 }
 
-/* .content-section.is-visible など、他の既存ルールはそのままにしてください */
+/* .他の既存ルールはそのままにしてください */
 
-/* フェードインアニメーションが適用されたセクション */
 .content-section.is-visible {
     opacity: 1;
     transform: translateY(0);
@@ -235,11 +216,11 @@ a:hover {
 .section-body p {
     font-size: 1rem;
     line-height: 1.7;
-    max-width: 700px; /* 読みやすさのため幅を制限 */
+    max-width: 700px; 
     opacity: 0.9;
 }
 
-/* 「MORE」ボタン (サイバーパンク/無機質風) */
+/* More Button*/
 .more-button {
     display: inline-block;
     margin-top: 30px;
@@ -257,7 +238,7 @@ a:hover {
 }
 
 /* ------------------------------
- * NEWSセクション (ヘッドレスCMS対応)
+ * NEWS(For Headless CMS)
  * ------------------------------ */
 #news-list {
     list-style: none;
@@ -268,7 +249,7 @@ a:hover {
 #news-list li {
     padding-bottom: 20px;
     margin-bottom: 20px;
-    border-bottom: 1px solid #222; /* 記事ごとの区切り線 */
+    border-bottom: 1px solid #222; /* Temp */
 }
 
 #news-list li:last-child {
@@ -278,7 +259,7 @@ a:hover {
 .news-date {
     display: block;
     font-size: 0.9rem;
-    color: var(--color-accent); /* アクセント色 (グレー) */
+    color: var(--color-accent); /* Color (Grey) */
     margin-bottom: 8px;
     letter-spacing: 1px;
 }
@@ -303,14 +284,13 @@ a:hover {
 }
 
 /* ------------------------------
- * 下層ページ共通スタイル (about.html など)
+ * Templete style (about.html )
  * ------------------------------ */
 
-/* ページのメインタイトル（"ABOUT US"など） */
 .page-header {
     padding: 120px 80px 40px 80px;
     border-bottom: 1px solid #222;
-    background-color: #050505; /* 背景を少し変える */
+    background-color: #050505; 
 }
 
 .page-header h1 {
@@ -321,11 +301,6 @@ a:hover {
     margin: 0;
 }
 
-/* about.htmlのコンテンツセクションは、
-   index.htmlの .content-section のスタイルが
-   そのまま適用されるので経済的です */
-
-/* 制作体制のリスト */
 .process-list {
     list-style: none;
     padding-left: 0;
@@ -342,8 +317,6 @@ a:hover {
     display: block;
 }
 
-
-/* ミッションとビジョンの強調ボックス */
 .vision-box {
     border: 1px solid #333;
     padding: 30px;
@@ -370,13 +343,13 @@ a:hover {
 }
 
 /* ------------------------------
- * フッター (footer)
+ * Footer(footer)
  * ------------------------------ */
 footer {
     padding: 80px 40px;
-    padding-left: calc(var(--sidebar-width) + 40px); /* サイドバー分を考慮 */
+    padding-left: calc(var(--sidebar-width) + 40px); 
     text-align: center;
-    background-color: #050505; /* フッターの背景をわずかに変える */
+    background-color: #050505; 
     position:relative;
     z-index: 0;
 }

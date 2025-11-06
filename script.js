@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('V-CLos Site Initialized.');
 
-    // 1. スクロール効果 (ヒーローフェードアウト & メイン背景フェードイン)
     setupScrollEffects();
 
-    // 2. セクションのフェードイン (既存のコード)
     setupSectionFadeIn();
 
-    // 3. 【追加】microCMSからニュースを取得・表示
     fetchNews();
 });
 
@@ -57,8 +54,7 @@ function setupScrollEffects() {
     });
 }
 // ----------------------------------------------------
-// 2. スクロールによるセクションのフェードインアニメーション
-// (処理を関数化)
+//Fade in animation (temp)
 // ----------------------------------------------------
 function setupSectionFadeIn() {
     const sections = document.querySelectorAll('.content-section');
@@ -83,19 +79,15 @@ function setupSectionFadeIn() {
 }
 
 // ----------------------------------------------------
-// 3. microCMSからニュースを取得する関数 (【ここを修正】)
+// Teke news form micoCMS
 // ----------------------------------------------------
 async function fetchNews() {
     const newsList = document.getElementById('news-list');
     if (!newsList) return;
 
-    // 【変更点】
-    // リクエスト先を、microCMSから「中継役」のパスに変更
     const endpoint = '/api/news'; 
 
     try {
-        // 【変更点】
-        // APIキーはサーバー側で処理されるため、headers: {} は不要
         const response = await fetch(endpoint); 
 
         if (!response.ok) {
@@ -107,7 +99,6 @@ async function fetchNews() {
 
         console.log('microCMSから取得したデータ:', articles);
 
-        // "Loading..."を削除
         newsList.innerHTML = ''; 
 
         if (articles.length === 0) {
@@ -115,7 +106,6 @@ async function fetchNews() {
             return;
         }
 
-        // (↓ 取得した記事を描画する部分は変更なし)
         articles.forEach(article => {
             const li = document.createElement('li');
             const date = new Date(article.publishedAt);
