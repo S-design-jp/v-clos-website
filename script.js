@@ -18,16 +18,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // 3. Page-specific data retrieval (!!Important!!)
     // ---------------------------------
 
+    // (A) For top pages
     if (document.getElementById('news-list')) {
         fetchTopPageNews();
+        // ここにトップページ用イベント取得も追加
+        // fetchTopPageEvents(); 
     }
 
+    // (B) For NEWS pages
     if (document.getElementById('news-list-all')) {
         fetchAllNews();
     }
 
+    // (C) For NEWS-detail pages
     if (document.getElementById('article-body')) {
         fetchNewsDetail();
+    }
+
+    // (D) For LIVE pages
+    if (document.getElementById('event-list-container')) {
+        fetchEventsList();
+    }
+
+    // (E) For LIVE-detail
+    if (document.getElementById('event-detail-wrapper')) {
+        fetchEventDetail();
     }
 });
 
@@ -209,6 +224,102 @@ async function fetchNewsDetail() {
         console.error('Failed to fetch news detail:', error);
         document.getElementById('article-title').innerText = 'エラー';
         document.getElementById('article-body').innerHTML = '<p>記事の読み込みに失敗しました。</p>';
+    }
+}
+// ----------------------------------------------------
+// 3-D. Fetch All Events (For /live.html)
+// ----------------------------------------------------
+async function fetchEventsList() {
+    const listContainer = document.getElementById('event-list-container');
+    const endpoint = '/api/events?all=true'; 
+
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+
+        const data = await response.json();
+        const events = data.contents;
+
+        const loadingEl = listContainer.querySelector('.event-loading');
+        if (loadingEl) loadingEl.remove();
+
+        if (events.length === 0) {
+            listContainer.innerHTML = '<p>現在、予定されているイベントはありません。</p>';
+            return;
+        }
+
+        events.forEach(event => {
+            const card = document.createElement('a');
+            card.href = `live-detail.html?id=${event.id}`;
+            card.className = 'event-card';
+
+            const formattedDate = formatDate(event.date); 
+            const imageUrl = event.mainImage ? event.mainImage.url : '/image/default-event.jpg'; 
+
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${event.title}" class="event-card-image">
+                <div class="event-card-content">
+                    <div class="event-card-meta">
+                        <span class="event-card-date">${formattedDate}</span>
+                        ${event.series ? `<span class="event-tag">${event.series}</span>` : ''}
+                        ${event.status ? `<span class="event-tag">${event.status}</span>` : ''}
+                    </div>
+                    <h3 class="event-card-title">${event.title}</h3>
+                </div>
+            `;
+            listContainer.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error('Failed to fetch events list:', error);
+        listContainer.innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
+    }
+}
+
+// ----------------------------------------------------
+// 3-E. Fetch Event Detail (For /live-detail.html)
+// ----------------------------------------------------
+async function fetchEventDetail() {
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('id');
+    
+    if (!eventId) {
+        document.getElementById('event-title').innerText = 'エラー';
+        document.getElementById('event-description').innerHTML = '<p>イベントIDが指定されていません。</p>';
+        return;
+    }
+
+    const endpoint = `/api/events?id=${eventId}`; 
+
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+
+        const event = await response.json();
+
+        document.title = `${event.title} | V-CLos Official Website`; 
+        
+        const imgEl = document.getElementById('event-main-image');
+        if (event.mainImage) {
+            imgEl.src = event.mainImage.url;
+            imgEl.alt = event.title;
+        } else {
+            imgEl.style.display = 'none';
+        }
+        
+        document.getElementById('event-date').innerText = formatDate(event.date);
+        document.getElementById('event-series').innerText = event.series || '';
+        document.getElementById('event-status').innerText = event.status || '';
+        
+        document.getElementById('event-title').innerText = event.title;
+        document.getElementById('event-venue').innerText = event.venue || '';
+        
+        document.getElementById('event-description').innerHTML = event.description || '<p>詳細は後日公開予定です。</p>';
+
+    } catch (error) {
+        console.error('Failed to fetch event detail:', error);
+        document.getElementById('event-title').innerText = 'エラー';
+        document.getElementById('event-description').innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
     }
 }
 
