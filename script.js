@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('V-CLos Site Initialized.');
-
+    setupMenuToggle();
     // ---------------------------------
     // 1. Scrolleffects (!!For all pages!!)
     // ---------------------------------
@@ -366,6 +366,24 @@ async function fetchTopPageEvents() {
     } catch (error) {
         console.error('Failed to fetch top page events:', error);
         eventListTop.innerHTML = '<li>イベントの読み込みに失敗しました。</li>';
+    }
+}
+
+// ----------------------------------------------------
+// 4. Mobile Menu Toggle
+// (【新規追加】)
+// ----------------------------------------------------
+function setupMenuToggle() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+
+    // ボタンがHTMLに存在する場合のみ実行
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            // .is-open クラスをボタンとサイドバーに付け外しする
+            menuToggle.classList.toggle('is-open');
+            sidebar.classList.toggle('is-open');
+        });
     }
 }
 
