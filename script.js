@@ -239,7 +239,7 @@ async function fetchEventsList() {
 
         const data = await response.json();
         const events = data.contents;
-
+        console.log('microCMSから取得したEventsデータ:', events);
         const loadingEl = listContainer.querySelector('.event-loading');
         if (loadingEl) loadingEl.remove();
 
