@@ -282,7 +282,18 @@ a:hover {
 .news-loading {
     color: var(--color-accent);
 }
+.news-link {
+    display: block;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
 
+.news-link:hover {
+    color: var(--color-text);
+    opacity: 1; 
+    background-color: rgba(255, 255, 255, 0.05); 
+}
 /* ------------------------------
  * Templete style (about.html )
  * ------------------------------ */
@@ -340,6 +351,61 @@ a:hover {
     font-weight: bold;
     line-height: 1.7;
     margin: 0;
+}
+/* ------------------------------
+ * News Article Page (news-detail.html)
+ * ------------------------------ */
+
+.article-header {
+    padding-bottom: 20px;
+}
+.article-date {
+    font-size: 1rem;
+    color: var(--color-accent);
+    letter-spacing: 1px;
+    margin-top: 15px;
+}
+
+.article-body {
+    max-width: 800px; 
+}
+.article-body h1,
+.article-body h2,
+.article-body h3 {
+    font-family: var(--font-logo);
+    letter-spacing: 1px;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.3em;
+}
+.article-body h1 { font-size: 2rem; }
+.article-body h2 { font-size: 1.7rem; }
+.article-body h3 { font-size: 1.4rem; }
+
+.article-body p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5em;
+    opacity: 0.9;
+}
+.article-body a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+.article-body a:hover {
+    color: var(--color-text);
+}
+.article-body img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.article-body ul,
+.article-body ol {
+    line-height: 1.8;
+    margin-bottom: 1.5em;
 }
 
 /* ------------------------------
