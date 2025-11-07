@@ -198,9 +198,12 @@ async function fetchNewsDetail() {
     const params = new URLSearchParams(window.location.search);
     const articleId = params.get('id');
     
+    const titleEl = document.getElementById('article-title');
+    const bodyEl = document.getElementById('article-body');
+    
     if (!articleId) {
-        document.getElementById('article-body').innerHTML = '<p>記事IDが指定されていません。</p>';
-        document.getElementById('article-title').innerText = 'エラー';
+        if (titleEl) titleEl.innerText = 'エラー';
+        if (bodyEl) bodyEl.innerHTML = '<p>記事IDが指定されていません。</p>';
         return;
     }
 
@@ -211,21 +214,48 @@ async function fetchNewsDetail() {
         if (!response.ok) throw new Error(`API request failed: ${response.status}`);
 
         const article = await response.json();
-
+        
         document.title = `${article.title} | V-CLos Official Website`; 
         
-        document.getElementById('article-title').innerText = article.title;
+        titleEl.innerText = article.title;
         
         document.getElementById('article-date').innerText = formatDate(article.publishedAt);
         
-        document.getElementById('article-body').innerHTML = article.body;
+        bodyEl.innerHTML = article.body || '<p>記事の本文がありません。</p>';
+
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": article.title,
+            "datePublished": article.publishedAt,
+            "description": article.summary || bodyEl.innerText.substring(0, 150) + "...", 
+            
+            "author": {
+                "@type": "Organization",
+                "name": "V-CLos"
+            },
+            
+            "publisher": {
+                "@type": "Organization",
+                "name": "V-CLos",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://v-clos-website.vercel.app/image/VCLosLogo.png"
+                }
+            }
+        };
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(structuredData);
+        document.head.appendChild(script);
 
     } catch (error) {
         console.error('Failed to fetch news detail:', error);
-        document.getElementById('article-title').innerText = 'エラー';
-        document.getElementById('article-body').innerHTML = '<p>記事の読み込みに失敗しました。</p>';
+        if (titleEl) titleEl.innerText = 'エラー';
+        if (bodyEl) bodyEl.innerHTML = '<p>記事の読み込みに失敗しました。</p>';
     }
 }
+
 // ----------------------------------------------------
 // 3-D. Fetch All Events (For /live.html)
 // ----------------------------------------------------
@@ -273,53 +303,6 @@ async function fetchEventsList() {
     } catch (error) {
         console.error('Failed to fetch events list:', error);
         listContainer.innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
-    }
-}
-
-// ----------------------------------------------------
-// 3-E. Fetch Event Detail (For /live-detail.html)
-// ----------------------------------------------------
-async function fetchEventDetail() {
-    const params = new URLSearchParams(window.location.search);
-    const eventId = params.get('id');
-    
-    if (!eventId) {
-        document.getElementById('event-title').innerText = 'エラー';
-        document.getElementById('event-description').innerHTML = '<p>イベントIDが指定されていません。</p>';
-        return;
-    }
-
-    const endpoint = `/api/events?id=${eventId}`; 
-
-    try {
-        const response = await fetch(endpoint);
-        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
-
-        const event = await response.json();
-
-        document.title = `${event.title} | V-CLos Official Website`; 
-        
-        const imgEl = document.getElementById('event-main-image');
-        if (event.mainImage) {
-            imgEl.src = event.mainImage.url;
-            imgEl.alt = event.title;
-        } else {
-            imgEl.style.display = 'none';
-        }
-        
-        document.getElementById('event-date').innerText = formatDate(event.date);
-        document.getElementById('event-series').innerText = event.series || '';
-        document.getElementById('event-status').innerText = event.status || '';
-        
-        document.getElementById('event-title').innerText = event.title;
-        document.getElementById('event-venue').innerText = event.venue || '';
-        
-        document.getElementById('event-description').innerHTML = event.description || '<p>詳細は後日公開予定です。</p>';
-
-    } catch (error) {
-        console.error('Failed to fetch event detail:', error);
-        document.getElementById('event-title').innerText = 'エラー';
-        document.getElementById('event-description').innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
     }
 }
 
