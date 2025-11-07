@@ -324,48 +324,78 @@ async function fetchEventDetail() {
 }
 
 // ----------------------------------------------------
-// 3-F. Fetch Events (For Top Page / index.html)
+// 3-E. Fetch Event Detail (For /live-detail.html)
 // ----------------------------------------------------
-async function fetchTopPageEvents() {
-    const eventListTop = document.getElementById('event-list-top');
-    if (!eventListTop) return;
+async function fetchEventDetail() {
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('id');
+    
+    const titleEl = document.getElementById('event-title');
+    const descEl = document.getElementById('event-description');
+    
+    if (!eventId) {
+        if(titleEl) titleEl.innerText = 'エラー';
+        if(descEl) descEl.innerHTML = '<p>イベントIDが指定されていません。</p>';
+        return;
+    }
 
-    const endpoint = '/api/events'; 
+    const endpoint = `/api/events?id=${eventId}`; 
 
     try {
         const response = await fetch(endpoint);
         if (!response.ok) throw new Error(`API request failed: ${response.status}`);
 
-        const data = await response.json();
-        const events = data.contents;
-
-        eventListTop.innerHTML = ''; 
-
-        if (events.length === 0) {
-            eventListTop.innerHTML = '<li>現在、予定されているイベントはありません。</li>';
-            return;
+        const event = await response.json();
+        
+        document.title = `${event.title} | V-CLos Official Website`; 
+        
+        const imgEl = document.getElementById('event-main-image');
+        if (event.mainImage) {
+            imgEl.src = event.mainImage.url;
+            imgEl.alt = event.title;
+        } else {
+            imgEl.style.display = 'none'; 
         }
+        
+        document.getElementById('event-date').innerText = formatDate(event.date);
+        document.getElementById('event-series').innerText = event.series || '';
+        document.getElementById('event-status').innerText = event.status || '';
+        
+        titleEl.innerText = event.title;
+        document.getElementById('event-venue').innerText = event.venue || '';
+        
+        const eventDescriptionText = event.description || '<p>詳細は後日公開予定です。</p>';
+        descEl.innerHTML = eventDescriptionText;
 
-        events.forEach(event => {
-            const li = document.createElement('li');
-            const formattedDate = formatDate(event.date); 
-
-            li.innerHTML = `
-                <a href="live-detail.html?id=${event.id}" class="news-link">
-                    <span class="news-date">${formattedDate}</span>
-                    <div class="event-card-meta" style="margin-bottom: 10px;">
-                        ${event.series ? `<span class="event-tag">${event.series}</span>` : ''}
-                        ${event.status ? `<span class="event-tag">${event.status}</span>` : ''}
-                    </div>
-                    <span class="news-title">${event.title}</span>
-                </a>
-            `;
-            eventListTop.appendChild(li);
-        });
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": event.title,
+            "startDate": event.date, 
+            "location": {
+                "@type": "Place",
+                "name": event.venue || "V-CLos Event"
+            },
+            "image": [
+                event.mainImage ? event.mainImage.url : ""
+            ],
+            "description": descEl.innerText.substring(0, 200) + "...", 
+            "organizer": {
+                "@type": "Organization",
+                "name": "V-CLos",
+                "url": "https://v-clos-website.vercel.app/" 
+            }
+        };
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(structuredData);
+        document.head.appendChild(script);
+        
 
     } catch (error) {
-        console.error('Failed to fetch top page events:', error);
-        eventListTop.innerHTML = '<li>イベントの読み込みに失敗しました。</li>';
+        console.error('Failed to fetch event detail:', error);
+        if(titleEl) titleEl.innerText = 'エラー';
+        if(descEl) descEl.innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
     }
 }
 
