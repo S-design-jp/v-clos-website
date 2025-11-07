@@ -374,7 +374,15 @@ async function fetchEventDetail() {
             "startDate": event.date, 
             "location": {
                 "@type": "Place",
-                "name": event.venue || "V-CLos Event"
+                "name": event.venue || "V-CLos Event",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "久本2-3-1",
+                    "addressLocality": "川崎市高津区",
+                    "addressRegion": "神奈川県",
+                    "postalCode": "213-8580",
+                    "addressCountry": "JP"
+                }
             },
             "image": [
                 event.mainImage ? event.mainImage.url : ""
