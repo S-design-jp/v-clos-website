@@ -804,6 +804,14 @@ footer {
 }
 
 /* ------------------------------
+ * Embedded Google Form (Contact Page)
+ * ------------------------------ */
+.google-form-iframe {
+    filter: invert(1);
+    
+}
+
+/* ------------------------------
  * Responsive (For Mobile)
  * ------------------------------ */
 
