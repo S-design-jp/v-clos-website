@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (document.getElementById('news-list')) {
         fetchTopPageNews();
         fetchTopPageEvents();
-        // fetchTopPageEvents(); 
     }
 
     // (B) For NEWS pages
@@ -256,8 +255,55 @@ async function fetchNewsDetail() {
     }
 }
 
+
 // ----------------------------------------------------
-// 3-D. Fetch All Events (For /live.html)
+// 3-D. Fetch Events (For Top Page / index.html)
+// ----------------------------------------------------
+async function fetchTopPageEvents() {
+    const eventListTop = document.getElementById('event-list-top');
+    if (!eventListTop) return;
+
+    const endpoint = '/api/events'; 
+
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+
+        const data = await response.json();
+        const events = data.contents;
+
+        eventListTop.innerHTML = ''; 
+
+        if (events.length === 0) {
+            eventListTop.innerHTML = '<li>現在、予定されているイベントはありません。</li>';
+            return;
+        }
+
+        events.forEach(event => {
+            const li = document.createElement('li');
+            const formattedDate = formatDate(event.date); 
+
+            li.innerHTML = `
+                <a href="live-detail.html?id=${event.id}" class="news-link">
+                    <span class="news-date">${formattedDate}</span>
+                    <div class="event-card-meta" style="margin-bottom: 10px;">
+                        ${event.series ? `<span class="event-tag">${event.series}</span>` : ''}
+                        ${event.status ? `<span class="event-tag">${event.status}</span>` : ''}
+                    </div>
+                    <span class="news-title">${event.title}</span>
+                </a>
+            `;
+            eventListTop.appendChild(li);
+        });
+
+    } catch (error) {
+        console.error('Failed to fetch top page events:', error);
+        eventListTop.innerHTML = '<li>イベントの読み込みに失敗しました。</li>';
+    }
+}
+
+// ----------------------------------------------------
+// 3-E. Fetch All Events (For /live.html)
 // ----------------------------------------------------
 async function fetchEventsList() {
     const listContainer = document.getElementById('event-list-container');
@@ -316,7 +362,7 @@ async function fetchEventsList() {
 }
 
 // ----------------------------------------------------
-// 3-E. Fetch Event Detail (For /live-detail.html)
+// 3-F. Fetch Event Detail (For /live-detail.html)
 // ----------------------------------------------------
 async function fetchEventDetail() {
     const params = new URLSearchParams(window.location.search);
