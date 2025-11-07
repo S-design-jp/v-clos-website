@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('V-CLos Site Initialized.');
     setupMenuToggle();
+    setupHeroSlider();
     // ---------------------------------
     // 1. Scrolleffects (!!For all pages!!)
     // ---------------------------------
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 // 1. Hero Scroll Effects
 // ----------------------------------------------------
 function setupScrollEffects() {
-    const heroBackground = document.querySelector('.hero-background');
+    const heroBackground = document.querySelector('.hero-slider-container');
     const heroSection = document.getElementById('hero');
     const mainBackground = document.getElementById('main-background');
 
@@ -61,7 +62,7 @@ function setupScrollEffects() {
         const heroHeight = heroSection.offsetHeight; 
 
         // (A) Hero Background Fade Out
-        if (heroBackground) {
+        if (heroBackground) { 
             const fadeStart = 0;
             const fadeEnd = heroHeight * 0.7; 
             let opacity = 1;
@@ -446,7 +447,27 @@ async function fetchEventDetail() {
 }
 
 // ----------------------------------------------------
-// 4. Mobile Menu Toggle
+// 4. Hero Background Slider 
+// ----------------------------------------------------
+function setupHeroSlider() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length === 0) return; 
+
+    let currentSlide = 0;
+    const slideInterval = 5000; 
+    slides[currentSlide].classList.add('is-active');
+
+    setInterval(() => {
+        slides[currentSlide].classList.remove('is-active');
+
+        currentSlide = (currentSlide + 1) % slides.length;
+        
+        slides[currentSlide].classList.add('is-active');
+    }, slideInterval);
+}
+
+// ----------------------------------------------------
+// 5. Mobile Menu Toggle
 // ----------------------------------------------------
 function setupMenuToggle() {
     const menuToggle = document.getElementById('menu-toggle');
