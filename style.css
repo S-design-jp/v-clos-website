@@ -714,6 +714,32 @@ footer {
     text-transform: uppercase;
 }
 
+.footer-sub-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px; /* リンク間の隙間 */
+    margin-top: 40px; /* 上のメインナビとの余白 */
+    margin-bottom: 30px; /* 下のコピーライトとの余白 */
+}
+
+.footer-sub-nav a {
+    font-size: 0.8rem; /* リクエスト通り文字を小さく */
+    font-weight: bold;
+    color: var(--color-accent); /* 目立ちすぎないようアクセント色に */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.footer-sub-nav a:hover {
+    color: var(--color-text); /* ホバーで白に */
+    opacity: 1;
+}
+
 .copyright {
     font-size: 0.8rem;
     color: var(--color-accent);
