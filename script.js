@@ -269,7 +269,9 @@ async function fetchEventsList() {
 
         const data = await response.json();
         const events = data.contents;
+        
         console.log('microCMSから取得したEventsデータ:', events);
+
         const loadingEl = listContainer.querySelector('.event-loading');
         if (loadingEl) loadingEl.remove();
 
@@ -282,10 +284,17 @@ async function fetchEventsList() {
             const card = document.createElement('a');
             card.href = `live-detail.html?id=${event.id}`;
             card.className = 'event-card';
+
             const formattedDate = formatDate(event.date); 
-            const imageUrl = event.thumbnail 
-                             ? event.thumbnail.url 
-                             : (event.mainImage ? event.mainImage.url : '/image/default-event.jpg');
+            
+            const baseImageUrl = event.thumbnail 
+                                 ? event.thumbnail.url 
+                                 : (event.mainImage ? event.mainImage.url : '/image/default-event.jpg');
+
+            const imageUrl = (baseImageUrl.startsWith('https://images.microcms-assets.io'))
+                             ? `${baseImageUrl}?fm=webp&w=600`
+                             : baseImageUrl; 
+
             card.innerHTML = `
                 <img src="${imageUrl}" alt="${event.title}" class="event-card-image">
                 <div class="event-card-content">
@@ -334,7 +343,7 @@ async function fetchEventDetail() {
         
         const imgEl = document.getElementById('event-main-image');
         if (event.mainImage) {
-            imgEl.src = event.mainImage.url;
+            imgEl.src = `${event.mainImage.url}?fm=webp&w=840`; 
             imgEl.alt = event.title;
         } else {
             imgEl.style.display = 'none'; 
