@@ -493,16 +493,14 @@ function setupMenuToggle() {
 }
 
 // ----------------------------------------------------
-// 5. Sidebar Active State (NEW)
+// 6. Sidebar Active State & Glitch Effect Prep
 // ----------------------------------------------------
 function setupSidebarActiveState() {
     const pageId = document.body.id;
-    if (!pageId) return; 
 
     let activeHref = "";
 
     if (pageId === 'page-index') {
-        return; 
     } else if (pageId === 'page-news' || pageId === 'page-news-detail') {
         activeHref = "news.html";
     } else if (pageId === 'page-live' || pageId === 'page-live-detail') {
@@ -513,19 +511,16 @@ function setupSidebarActiveState() {
         activeHref = "media.html";
     } else if (pageId === 'page-contact') {
         activeHref = "contact.html";
-    } else if (pageId === 'page-policy') {
-        return;
     }
-
-    if (activeHref) {
-        const sidebarLinks = document.querySelectorAll('#sidebar .sidebar-nav a');
-        sidebarLinks.forEach(link => {
-            if (link.getAttribute('href') === activeHref) {
-                link.classList.add('is-active');
-            }
-        });
-    }
+    const sidebarLinks = document.querySelectorAll('#sidebar .sidebar-nav a');
+    sidebarLinks.forEach(link => {
+        link.dataset.text = link.innerText;
+        if (activeHref && link.getAttribute('href') === activeHref) {
+            link.classList.add('is-active');
+        }
+    });
 }
+
 // ----------------------------------------------------
 // Utility: Date format function
 // ----------------------------------------------------
