@@ -51,9 +51,7 @@ a:hover {
     font-size: 1.8rem;
     font-weight: bold;
     letter-spacing: 1px;
-    padding-bottom: 20px; 
-    margin-bottom: 20px;  
-    border-bottom: 1px solid #333;
+    margin-bottom: 50px; 
 }
 
 .sidebar-nav {
