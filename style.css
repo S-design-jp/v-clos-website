@@ -61,11 +61,10 @@ a:hover {
     list-style: none;
     padding: 0;
     margin: 0;
-    border-bottom: 1px solid #333;
 }
 
 .sidebar-nav li {
-    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
 }
 
 .sidebar-nav a {
@@ -74,15 +73,10 @@ a:hover {
     letter-spacing: 1.5px; 
     text-transform: uppercase; 
     display: block; 
-    padding: 20px 0; 
+    padding: 20px 0 ; 
     position: relative; 
     border-bottom: 3px solid transparent; 
 }
-.sidebar-nav a {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        display: block; 
-    }
 .sidebar-social {
     margin-top: auto; 
     font-size: 0.9rem;
@@ -910,6 +904,11 @@ footer {
     }
     #sidebar.is-open {
         transform: translateX(0);
+    }
+
+    .sidebar-nav a {
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
 
     
