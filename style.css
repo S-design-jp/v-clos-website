@@ -857,6 +857,53 @@ footer {
 }
 
 /* ------------------------------
+ * Sidebar Hover Noise Effect (NEW)
+ * ------------------------------ */
+
+@keyframes noise-glitch {
+  0% {
+    clip-path: inset(10% 0 80% 0);
+    transform: translate(-1px, 1px);
+    opacity: 0.8;
+  }
+  20% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(1px, -1px);
+    opacity: 0.7;
+  }
+  40% {
+    clip-path: inset(25% 0 50% 0);
+    transform: translate(-1px, 1px);
+    opacity: 0.9;
+  }
+  60% {
+    clip-path: inset(60% 0 20% 0);
+    transform: translate(1px, -1px);
+    opacity: 0.6;
+  }
+  80% {
+    clip-path: inset(40% 0 15% 0);
+    transform: translate(-1px, 1px);
+    opacity: 0.8;
+  }
+  100% {
+    clip-path: inset(75% 0 5% 0);
+    transform: translate(1px, 0);
+    opacity: 0.7;
+  }
+}
+
+.sidebar-nav a:hover {
+  color: var(--color-text); 
+  opacity: 1;
+
+  animation: noise-glitch 0.3s linear;
+}
+.sidebar-nav a.is-active:hover {
+  border-bottom-color: inherit; 
+}
+
+/* ------------------------------
  * Responsive (For Mobile)
  * ------------------------------ */
 
