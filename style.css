@@ -63,19 +63,18 @@ a:hover {
     margin: 0;
 }
 
-.sidebar-nav li {
-    border-bottom: 1px solid #333;
-}
-
 .sidebar-nav a {
     font-size: 1rem;
     font-weight: 500;
     letter-spacing: 1.5px; 
     text-transform: uppercase; 
     display: block; 
-    padding: 20px 0 ; 
-    position: relative; 
-    border-bottom: 3px solid transparent; 
+    position: relative;
+    padding-top: 20px; 
+    color: var(--color-accent); 
+    padding-bottom: 22px;       
+    border-bottom: 1px solid #333; 
+    transition: all 0.3s ease; 
 }
 .sidebar-social {
     margin-top: auto; 
@@ -91,6 +90,8 @@ a:hover {
 .sidebar-nav a.is-active {
     color: var(--color-text);
     font-weight: bold;
+    padding-bottom: 20px;
+    border-bottom-width: 3px;
     border-bottom-color: var(--color-accent); 
 }
 
