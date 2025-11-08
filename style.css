@@ -51,10 +51,9 @@ a:hover {
     font-size: 1.8rem;
     font-weight: bold;
     letter-spacing: 1px;
-    margin-bottom: 50px;
-    margin-bottom: 30px; 
-    padding-bottom: 30px; 
-    border-bottom: 1px solid #333; 
+    padding-bottom: 20px; 
+    margin-bottom: 20px;  
+    border-bottom: 1px solid #333;
 }
 
 .sidebar-nav {
@@ -70,10 +69,10 @@ a:hover {
     text-transform: uppercase; 
     display: block; 
     position: relative;
-    padding-top: 20px; 
+    padding-top: 15px; 
     color: var(--color-accent); 
-    padding-bottom: 22px;       
-    border-bottom: 1px solid #333; 
+    padding-bottom: 17px; 
+    border-bottom: 1px solid #333;
     transition: all 0.3s ease; 
 }
 .sidebar-social {
