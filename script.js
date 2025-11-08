@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log('V-CLos Site Initialized.');
     setupMenuToggle();
     setupHeroSlider();
+    setupSidebarActiveState();
     // ---------------------------------
     // 1. Scrolleffects (!!For all pages!!)
     // ---------------------------------
@@ -491,6 +492,40 @@ function setupMenuToggle() {
     }
 }
 
+// ----------------------------------------------------
+// 5. Sidebar Active State (NEW)
+// ----------------------------------------------------
+function setupSidebarActiveState() {
+    const pageId = document.body.id;
+    if (!pageId) return; 
+
+    let activeHref = "";
+
+    if (pageId === 'page-index') {
+        return; 
+    } else if (pageId === 'page-news' || pageId === 'page-news-detail') {
+        activeHref = "news.html";
+    } else if (pageId === 'page-live' || pageId === 'page-live-detail') {
+        activeHref = "live.html";
+    } else if (pageId === 'page-about') {
+        activeHref = "about.html";
+    } else if (pageId === 'page-media') {
+        activeHref = "media.html";
+    } else if (pageId === 'page-contact') {
+        activeHref = "contact.html";
+    } else if (pageId === 'page-policy') {
+        return;
+    }
+
+    if (activeHref) {
+        const sidebarLinks = document.querySelectorAll('#sidebar .sidebar-nav a');
+        sidebarLinks.forEach(link => {
+            if (link.getAttribute('href') === activeHref) {
+                link.classList.add('is-active');
+            }
+        });
+    }
+}
 // ----------------------------------------------------
 // Utility: Date format function
 // ----------------------------------------------------

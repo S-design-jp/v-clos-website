@@ -52,12 +52,16 @@ a:hover {
     font-weight: bold;
     letter-spacing: 1px;
     margin-bottom: 50px;
+    margin-bottom: 30px; 
+    padding-bottom: 30px; 
+    border-bottom: 1px solid #333; 
 }
 
 .sidebar-nav {
     list-style: none;
     padding: 0;
     margin: 0;
+    border-bottom: 1px solid #333;
 }
 
 .sidebar-nav li {
@@ -69,6 +73,11 @@ a:hover {
     font-weight: 500;
     letter-spacing: 1.5px; 
     text-transform: uppercase; 
+    display: block; 
+    padding: 20px 0; 
+    position: relative; 
+    border-bottom: 3px solid transparent; 
+    margin-bottom: -3px;
 }
 .sidebar-nav a {
         padding-top: 5px;
@@ -81,6 +90,37 @@ a:hover {
 }
 .sidebar-social a {
     margin-right: 15px;
+}
+
+/* ------------------------------
+ * Sidebar Active State (NEW)
+ * ------------------------------ */
+.sidebar-nav a.is-active {
+    color: var(--color-text);
+    font-weight: bold;
+    border-bottom-color: var(--color-accent); 
+}
+
+#page-news .sidebar-nav a[href="news.html"].is-active,
+#page-news-detail .sidebar-nav a[href="news.html"].is-active {
+    border-bottom-color: #00FFFF; 
+}
+
+#page-live .sidebar-nav a[href="live.html"].is-active,
+#page-live-detail .sidebar-nav a[href="live.html"].is-active {
+    border-bottom-color: #fffb00; 
+}
+
+#page-about .sidebar-nav a[href="about.html"].is-active {
+    border-bottom-color: #ff0088; 
+}
+
+#page-media .sidebar-nav a[href="media.html"].is-active {
+    border-bottom-color: #3357FF; 
+}
+
+#page-contact .sidebar-nav a[href="contact.html"].is-active {
+    border-bottom-color: #ff0000; 
 }
 
 /* ------------------------------
