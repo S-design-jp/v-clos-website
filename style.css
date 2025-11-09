@@ -964,6 +964,21 @@ footer::before {
   100% { clip-path: inset(60% 0 30% 0); transform: translate(-2px, -2px); }
 }
 
+/* ------------------------------
+ * Contact Prompt Button 
+ * ------------------------------ */
+.contact-prompt-wrapper {
+    margin-top: 80px; 
+    text-align: center;
+}
+.contact-prompt-wrapper p {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+.contact-prompt-wrapper .media-button-index {
+    display: inline-block;
+}
 
 /* ------------------------------
  * Responsive (For Mobile)
