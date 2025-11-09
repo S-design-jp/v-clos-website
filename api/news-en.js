@@ -1,18 +1,19 @@
-// /api/events.js
 export default async function handler(request, response) {
+  
   const API_KEY = process.env.MICROCMS_API_KEY;
   const SERVICE_DOMAIN = process.env.MICROCMS_SERVICE_DOMAIN;
-  const { id, all, limit } = request.query;
-  let endpoint = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/events`;
+
+  const { id, all } = request.query;
+
+  let endpoint = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/news_en`;
   let query = '';
 
   if (id) {
-    query = `/${id}?fields=title,series,date,status,mainImage,venue,description,title_zh_hans,series_zh_hans,status_zh_hans,venue_zh_hans,description_zh_hans`;
+    query = `/${id}?fields=title,summary,body,publishedAt`;
   } else if (all) {
-    query = `?limit=100&fields=title,series,date,status,mainImage,venue,id,thumbnail,title_zh_hans,series_zh_hans,status_zh_hans`;
+    query = `?limit=100&fields=title,summary,publishedAt,id`;
   } else {
-    const limitCount = limit ? parseInt(limit, 10) : 3;
-    query = `?limit=${limitCount}&fields=title,series,date,status,id,title_zh_hans,series_zh_hans,status_zh_hans`;
+    query = `?limit=3&fields=title,summary,publishedAt,id`;
   }
 
   try {
