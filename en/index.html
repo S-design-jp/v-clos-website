@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html lang="en"> <head>
+<html lang="en"> 
+    <head>
+    <script>
+  (function(d) {
+    var config = {
+      kitId: 'alx8fbs',
+      scriptTimeout: 3000,
+      async: true
+    },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)})(document);
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V-CLos Official Website</title>
 
     <link rel="preconnect" href="https://use.typekit.net" crossorigin>
     <link rel="preload" as="image" href="/image/slide1.jpg" fetchpriority="high">
-
-    <link rel="stylesheet" href="https://use.typekit.net/alx8fbs.css" fetchpriority="high">
     
     <link rel="stylesheet" href="../style.css">
-        <link rel="icon" href="/image/VCLosLogo.png" type="image/png">
+    <link rel="icon" href="/image/VCLosLogo.png" type="image/png">
     <link rel="apple-touch-icon" href="/image/apple-touch-icon.jpg">
 
     <meta name="description" content="V-CLos is a 3DCG live production collective by students from Senzoku Gakuen College of Music. Broadcasting information on 'VOCA-Fes' and more.">
@@ -18,7 +26,8 @@
     <meta property="og:title" content="V-CLos Official Website">
     <meta property="og:description" content="V-CLos is a 3DCG live production collective by students from Senzoku Gakuen College of Music. Broadcasting information on 'VOCA-Fes' and more.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://v-clos.jp/en/index.html">     <meta property="og:image" content="https://pbs.twimg.com/profile_banners/1801847853918392321/1731183339/1500x500">
+    <meta property="og:url" content="https://v-clos.jp/en/index.html"> 
+    <meta property="og:image" content="https://pbs.twimg.com/profile_banners/1801847853918392321/1731183339/1500x500">
     <meta property="og:site_name" content="V-CLos Official Website">
 
     <meta name="twitter:card" content="summary_large_image">
@@ -45,7 +54,7 @@
                 <li><a href="/en/media.html">MEDIA</a></li>
                 <li><a href="/en/contact.html">CONTACT</a></li>
             </ul>
-        <div class="lang-switcher">
+            <div class="lang-switcher">
                 <a href="#" id="lang-jp">JP</a>
                 <span>/</span>
                 <a href="#" id="lang-en">EN</a>
