@@ -15,7 +15,7 @@ function getLanguagePrefix() {
 const LANG_PREFIX = getLanguagePrefix();
 
 // ----------------------------------------------------
-// 0. DOMContentLoaded (実行ハブ)
+// 0. DOMContentLoaded 
 // ----------------------------------------------------
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('V-CLos Site Initialized.');
@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     setupSidebarActiveState();
     setupLanguageSwitcher();
     
-    // スクロールエフェクト
+
     setupScrollEffects();
     setupSectionFadeIn();
 
-    // ページ固有のデータ取得
+
     if (document.getElementById('news-list')) {
         fetchTopPageNews();
         fetchTopPageEvents();
@@ -68,7 +68,7 @@ function setupScrollEffects() {
             }
             heroBackground.style.opacity = Math.max(0, opacity);
         }
-        if (mainBackground) { // mainBackgroundもnullチェック
+        if (mainBackground) { 
             const fadeInStart = heroHeight * 0.4; 
             const fadeInEnd = heroHeight * 0.9; 
             let mainOpacity = 0;
@@ -207,7 +207,7 @@ async function fetchNewsDetail() {
         const title = (isZH && article.title_zh_hans) ? article.title_zh_hans : article.title;
         const summary = (isZH && article.summary_zh_hans) ? article.summary_zh_hans : article.summary;
         const body = (isZH && article.body_zh_hans) 
-                     ? article.body_zh_hans /
+                     ? article.body_zh_hans 
                      : (article.body || ''); 
 
         document.title = `${title} | V-CLos Official Website`; 
@@ -266,7 +266,6 @@ async function fetchTopPageEvents() {
         events.forEach(event => {
             const li = document.createElement('li');
             const formattedDate = formatDate(event.date); 
-            
             const isZH = (LANG_PREFIX === '-zh-Hans');
             const title = (isZH && event.title_zh_hans) ? event.title_zh_hans : event.title;
             const series = event.series; 
@@ -373,12 +372,12 @@ async function fetchEventDetail() {
         
         const isZH = (LANG_PREFIX === '-zh-Hans');
         const title = (isZH && event.title_zh_hans) ? event.title_zh_hans : event.title;
-        const series = event.series; 
+        const series = event.series; // (seriesは共通)
         const status = (isZH && event.status_zh_hans) ? event.status_zh_hans : event.status;
         const venue = (isZH && event.venue_zh_hans) ? event.venue_zh_hans : event.venue;
         const description = (isZH && event.description_zh_hans)
-                            ? event.description_zh_hans 
-                            : (event.description || ''); 
+                            ? event.description_zh_hans // 簡体字ページ
+                            : (event.description || ''); // 日本語ページ
         
         document.title = `${title} | V-CLos Official Website`; 
         
@@ -409,7 +408,7 @@ async function fetchEventDetail() {
                     "streetAddress": "久本2-3-1",
                     "addressLocality": "川崎市高津区",
                     "addressRegion": "神奈川県",
-                    "postalCode": "213-8580",
+                    "postalCode": "213-8S80",
                     "addressCountry": "JP"
                 }
             },
@@ -521,7 +520,6 @@ function setupLanguageSwitcher() {
         langJP.classList.add('is-active-lang');
     }
     
-
     if (baseFile === '/' || baseFile === '/en/' || baseFile === '/zh-Hans/') {
         baseFile = '/index.html';
     }
