@@ -59,10 +59,6 @@ a:hover {
 }
 
 
-.sidebar-nav li {
-    border-bottom: 1px solid #333; 
-}
-
 .sidebar-nav a {
     font-size: 1rem;
     font-weight: 500;
@@ -74,8 +70,8 @@ a:hover {
     text-shadow: none; 
     padding-top: 20px; 
     padding-bottom: 20px;
-    
     color: var(--color-accent); 
+    border-bottom: 1px solid #333; 
 }
 
 
@@ -94,22 +90,14 @@ a:hover {
 .sidebar-nav a.is-active {
     color: var(--color-text); 
     font-weight: bold;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--color-accent);
 }
-.sidebar-nav a.is-active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px; 
-
-    left: 0;
-    width: 100%;
-    height: 3px; 
-    background-color: var(--color-accent); 
-}
-
 
 #page-news .sidebar-nav a[href="news.html"].is-active::after,
 #page-news-detail .sidebar-nav a[href="news.html"].is-active::after {
-    background-color: #00FFFF; 
+    border-bottom-color: #00FFFF; 
 }
 
 #page-live .sidebar-nav a[href="live.html"].is-active::after,
@@ -952,7 +940,14 @@ footer::before {
 }
 
 .sidebar-nav a.is-active:hover {
+    color: var(--color-text); 
     border-bottom-color: inherit; 
+    animation: none; 
+}
+.sidebar-nav a.is-active:hover::before,
+.sidebar-nav a.is-active:hover::after {
+    opacity: 0;
+    visibility: hidden;
 }
 
 @keyframes glitch-base {
