@@ -490,7 +490,7 @@ function setupSidebarActiveState() {
     const sidebarLinks = document.querySelectorAll('#sidebar .sidebar-nav a');
     sidebarLinks.forEach(link => {
         link.dataset.text = link.innerText;
-        if (activeHref && link.getAttribute('href') === activeHref) {
+        if (activeHref && link.getAttribute('href').endsWith(activeHref)) {
             link.classList.add('is-active');
         }
     });

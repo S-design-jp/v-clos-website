@@ -95,26 +95,26 @@ a:hover {
     border-bottom-color: var(--color-accent);
 }
 
-#page-news .sidebar-nav a[href="news.html"].is-active::after,
-#page-news-detail .sidebar-nav a[href="news.html"].is-active::after {
+#page-news .sidebar-nav a[href$="news.html"].is-active,
+#page-news-detail .sidebar-nav a[href$="news.html"].is-active {
     border-bottom-color: #00FFFF; 
 }
 
-#page-live .sidebar-nav a[href="live.html"].is-active::after,
-#page-live-detail .sidebar-nav a[href="live.html"].is-active::after {
-    background-color: #fffb00; 
+#page-live .sidebar-nav a[href$="live.html"].is-active,
+#page-live-detail .sidebar-nav a[href$="live.html"].is-active {
+    border-bottom-color: #fffb00; 
 }
 
-#page-about .sidebar-nav a[href="about.html"].is-active::after {
-    background-color: #ff0088; 
+#page-about .sidebar-nav a[href$="about.html"].is-active {
+    border-bottom-color: #ff0088; 
 }
 
-#page-media .sidebar-nav a[href="media.html"].is-active::after {
-    background-color: #3357FF; 
+#page-media .sidebar-nav a[href$="media.html"].is-active {
+    border-bottom-color: #3357FF; 
 }
 
-#page-contact .sidebar-nav a[href="contact.html"].is-active::after {
-    background-color: #ff0000; 
+#page-contact .sidebar-nav a[href$="contact.html"].is-active {
+    border-bottom-color: #ff0000; 
 }
 /* ------------------------------
  * Main content (#main-content)
