@@ -3,14 +3,14 @@
 // ----------------------------------------------------
 function getLanguagePrefix() {
     const path = window.location.pathname;
-    
+
     if (path.startsWith('/en/')) {
-        return '-en'; 
+        return '-en';
     }
-    if (path.startsWith('/zh-Hans/')) { 
+    if (path.startsWith('/zh-Hans/')) {
         return '-zh-Hans'; // 簡体字
     }
-    return ''; 
+    return '';
 }
 const LANG_PREFIX = getLanguagePrefix();
 
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     setupHeroSlider();
     setupSidebarActiveState();
     setupLanguageSwitcher();
-    
+
 
     setupScrollEffects();
     setupSectionFadeIn();
@@ -54,23 +54,23 @@ function setupScrollEffects() {
     const heroBackground = document.querySelector('.hero-slider-container');
     const heroSection = document.getElementById('hero');
     const mainBackground = document.getElementById('main-background');
-    if (!heroSection || !mainBackground) return; 
+    if (!heroSection || !mainBackground) return;
 
     window.addEventListener('scroll', () => {
         const scrollY = window.scrollY;
-        const heroHeight = heroSection.offsetHeight; 
-        if (heroBackground) { 
+        const heroHeight = heroSection.offsetHeight;
+        if (heroBackground) {
             const fadeStart = 0;
-            const fadeEnd = heroHeight * 0.7; 
+            const fadeEnd = heroHeight * 0.7;
             let opacity = 1;
             if (scrollY > fadeStart) {
                 opacity = 1 - ((scrollY - fadeStart) / (fadeEnd - fadeStart));
             }
             heroBackground.style.opacity = Math.max(0, opacity);
         }
-        if (mainBackground) { 
-            const fadeInStart = heroHeight * 0.4; 
-            const fadeInEnd = heroHeight * 0.9; 
+        if (mainBackground) {
+            const fadeInStart = heroHeight * 0.4;
+            const fadeInEnd = heroHeight * 0.9;
             let mainOpacity = 0;
             if (scrollY > fadeInStart) {
                 mainOpacity = (scrollY - fadeInStart) / (fadeInEnd - fadeInStart);
@@ -107,12 +107,12 @@ async function fetchTopPageNews() {
     const endpoint = `/api/news${LANG_PREFIX}`;
 
     try {
-        const response = await fetch(endpoint); 
+        const response = await fetch(endpoint);
         if (!response.ok) throw new Error(`API request failed: ${response.status}`);
         const data = await response.json();
         const articles = data.contents;
-        
-        newsList.innerHTML = ''; 
+
+        newsList.innerHTML = '';
         if (articles.length === 0) {
             newsList.innerHTML = '<li>現在、新しいニュースはありません。</li>';
             return;
@@ -124,7 +124,7 @@ async function fetchTopPageNews() {
             const isZH = (LANG_PREFIX === '-zh-Hans');
             const title = (isZH && article.title_zh_hans) ? article.title_zh_hans : article.title;
             const summary = (isZH && article.summary_zh_hans) ? article.summary_zh_hans : article.summary;
-            
+
             li.innerHTML = `
                 <a href="news-detail.html?id=${article.id}" class="news-link">
                     <span class="news-date">${formattedDate}</span>
@@ -154,7 +154,7 @@ async function fetchAllNews() {
         const data = await response.json();
         const articles = data.contents;
 
-        newsListAll.innerHTML = ''; 
+        newsListAll.innerHTML = '';
         if (articles.length === 0) {
             newsListAll.innerHTML = '<li>現在、新しいニュースはありません。</li>';
             return;
@@ -163,7 +163,7 @@ async function fetchAllNews() {
         articles.forEach(article => {
             const li = document.createElement('li');
             const formattedDate = formatDate(article.publishedAt);
-            const isZH = (LANG_PREFIX === '-zh-Hans'); 
+            const isZH = (LANG_PREFIX === '-zh-Hans');
             const title = (isZH && article.title_zh_hans) ? article.title_zh_hans : article.title;
             const summary = (isZH && article.summary_zh_hans) ? article.summary_zh_hans : article.summary;
 
@@ -190,7 +190,7 @@ async function fetchNewsDetail() {
     const articleId = params.get('id');
     const titleEl = document.getElementById('article-title');
     const bodyEl = document.getElementById('article-body');
-    
+
     if (!articleId) {
         if (titleEl) titleEl.innerText = 'エラー';
         if (bodyEl) bodyEl.innerHTML = '<p>記事IDが指定されていません。</p>';
@@ -206,11 +206,11 @@ async function fetchNewsDetail() {
         const isZH = (LANG_PREFIX === '-zh-Hans');
         const title = (isZH && article.title_zh_hans) ? article.title_zh_hans : article.title;
         const summary = (isZH && article.summary_zh_hans) ? article.summary_zh_hans : article.summary;
-        const body = (isZH && article.body_zh_hans) 
-                     ? article.body_zh_hans 
-                     : (article.body || ''); 
+        const body = (isZH && article.body_zh_hans)
+            ? article.body_zh_hans
+            : (article.body || '');
 
-        document.title = `${title} | V-CLos Official Website`; 
+        document.title = `${title} | V-CLos Official Website`;
         titleEl.innerText = title;
         document.getElementById('article-date').innerText = formatDate(article.publishedAt);
         bodyEl.innerHTML = body || '<p>記事の本文がありません。</p>';
@@ -218,16 +218,16 @@ async function fetchNewsDetail() {
         const structuredData = {
             "@context": "https://schema.org",
             "@type": "Article",
-            "headline": title, 
+            "headline": title,
             "datePublished": article.publishedAt,
-            "description": summary || bodyEl.innerText.substring(0, 150) + "...", 
+            "description": summary || bodyEl.innerText.substring(0, 150) + "...",
             "author": { "@type": "Organization", "name": "V-CLos" },
             "publisher": {
                 "@type": "Organization",
                 "name": "V-CLos",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://v-clos.jp/image/VCLosLogo.png" 
+                    "url": "https://v-clos.jp/image/VCLosLogo.png"
                 }
             }
         };
@@ -248,7 +248,7 @@ async function fetchNewsDetail() {
 // ----------------------------------------------------
 async function fetchTopPageEvents() {
     const eventListTop = document.getElementById('event-list-top');
-    if (!eventListTop) return; 
+    if (!eventListTop) return;
     const endpoint = `/api/events${LANG_PREFIX}`;
 
     try {
@@ -256,8 +256,8 @@ async function fetchTopPageEvents() {
         if (!response.ok) throw new Error(`API request failed: ${response.status}`);
         const data = await response.json();
         const events = data.contents;
-        
-        eventListTop.innerHTML = ''; 
+
+        eventListTop.innerHTML = '';
         if (events.length === 0) {
             eventListTop.innerHTML = '<li>現在、予定されているイベントはありません。</li>';
             return;
@@ -265,12 +265,12 @@ async function fetchTopPageEvents() {
 
         events.forEach(event => {
             const li = document.createElement('li');
-            const formattedDate = formatDate(event.date); 
+            const formattedDate = formatDate(event.date);
             const isZH = (LANG_PREFIX === '-zh-Hans');
             const title = (isZH && event.title_zh_hans) ? event.title_zh_hans : event.title;
-            const series = event.series; 
+            const series = event.series;
             const status = (isZH && event.status_zh_hans) ? event.status_zh_hans : event.status;
-            
+
             li.innerHTML = `
                 <a href="live-detail.html?id=${event.id}" class="news-link">
                     <span class="news-date">${formattedDate}</span>
@@ -295,7 +295,7 @@ async function fetchTopPageEvents() {
 // ----------------------------------------------------
 async function fetchEventsList() {
     const listContainer = document.getElementById('event-list-container');
-    if (!listContainer) return; 
+    if (!listContainer) return;
     const endpoint = `/api/events${LANG_PREFIX}?all=true`;
 
     try {
@@ -315,15 +315,15 @@ async function fetchEventsList() {
             const card = document.createElement('a');
             card.href = `live-detail.html?id=${event.id}`;
             card.className = 'event-card';
-            const formattedDate = formatDate(event.date); 
+            const formattedDate = formatDate(event.date);
             const baseImageUrl = event.thumbnail ? event.thumbnail.url : (event.mainImage ? event.mainImage.url : '/image/default-event.jpg');
-            const imageUrl = (baseImageUrl.startsWith('https://images.microcms-assets.io')) ? `${baseImageUrl}?fm=webp&w=600` : baseImageUrl; 
+            const imageUrl = (baseImageUrl.startsWith('https://images.microcms-assets.io')) ? `${baseImageUrl}?fm=webp&w=600` : baseImageUrl;
 
             const isZH = (LANG_PREFIX === '-zh-Hans');
             const title = (isZH && event.title_zh_hans) ? event.title_zh_hans : event.title;
-            const series = event.series; 
+            const series = event.series;
             const status = (isZH && event.status_zh_hans) ? event.status_zh_hans : event.status;
-            
+
             card.innerHTML = `
                 <img src="${imageUrl}" alt="${title}" class="event-card-image">
                 <div class="event-card-content">
@@ -359,8 +359,8 @@ async function fetchEventDetail() {
     const venueEl = document.getElementById('event-venue');
 
     if (!eventId) {
-        if(titleEl) titleEl.innerText = 'エラー';
-        if(descEl) descEl.innerHTML = '<p>イベントIDが指定されていません。</p>';
+        if (titleEl) titleEl.innerText = 'エラー';
+        if (descEl) descEl.innerHTML = '<p>イベントIDが指定されていません。</p>';
         return;
     }
     const endpoint = `/api/events${LANG_PREFIX}?id=${eventId}`;
@@ -369,25 +369,25 @@ async function fetchEventDetail() {
         const response = await fetch(endpoint);
         if (!response.ok) throw new Error(`API request failed: ${response.status}`);
         const event = await response.json();
-        
+
         const isZH = (LANG_PREFIX === '-zh-Hans');
         const title = (isZH && event.title_zh_hans) ? event.title_zh_hans : event.title;
         const series = event.series; // (seriesは共通)
         const status = (isZH && event.status_zh_hans) ? event.status_zh_hans : event.status;
         const venue = (isZH && event.venue_zh_hans) ? event.venue_zh_hans : event.venue;
         const description = (isZH && event.description_zh_hans)
-                            ? event.description_zh_hans // 簡体字ページ
-                            : (event.description || ''); // 日本語ページ
-        
-        document.title = `${title} | V-CLos Official Website`; 
-        
+            ? event.description_zh_hans // 簡体字ページ
+            : (event.description || ''); // 日本語ページ
+
+        document.title = `${title} | V-CLos Official Website`;
+
         if (event.mainImage) {
-            imgEl.src = `${event.mainImage.url}?fm=webp&w=840`; 
-            imgEl.alt = title; 
+            imgEl.src = `${event.mainImage.url}?fm=webp&w=840`;
+            imgEl.alt = title;
         } else {
-            imgEl.style.display = 'none'; 
+            imgEl.style.display = 'none';
         }
-        
+
         dateEl.innerText = formatDate(event.date);
         seriesEl.innerText = series || '';
         statusEl.innerText = status || '';
@@ -399,10 +399,10 @@ async function fetchEventDetail() {
             "@context": "https://schema.org",
             "@type": "Event",
             "name": title,
-            "startDate": event.date, 
+            "startDate": event.date,
             "location": {
                 "@type": "Place",
-                "name": venue || "洗足学園音楽大学", 
+                "name": venue || "洗足学園音楽大学",
                 "address": {
                     "@type": "PostalAddress",
                     "streetAddress": "久本2-3-1",
@@ -412,23 +412,23 @@ async function fetchEventDetail() {
                     "addressCountry": "JP"
                 }
             },
-            "image": [ event.mainImage ? `${event.mainImage.url}?fm=webp&w=840` : "" ],
-            "description": descEl.innerText.substring(0, 200) + "...", 
+            "image": [event.mainImage ? `${event.mainImage.url}?fm=webp&w=840` : ""],
+            "description": descEl.innerText.substring(0, 200) + "...",
             "organizer": {
                 "@type": "Organization",
                 "name": "V-CLos",
-                "url": "https://v-clos.jp/" 
+                "url": "https://v-clos.jp/"
             }
         };
         const script = document.createElement('script');
         script.type = 'application/ld+json';
         script.text = JSON.stringify(structuredData);
         document.head.appendChild(script);
-        
+
     } catch (error) {
         console.error('Failed to fetch event detail:', error);
-        if(titleEl) titleEl.innerText = 'エラー';
-        if(descEl) descEl.innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
+        if (titleEl) titleEl.innerText = 'エラー';
+        if (descEl) descEl.innerHTML = '<p>イベントの読み込みに失敗しました。</p>';
     }
 }
 
@@ -437,9 +437,9 @@ async function fetchEventDetail() {
 // ----------------------------------------------------
 function setupHeroSlider() {
     const slides = document.querySelectorAll('.hero-slide');
-    if (slides.length === 0) return; 
+    if (slides.length === 0) return;
     let currentSlide = 0;
-    const slideInterval = 5000; 
+    const slideInterval = 5000;
     slides[currentSlide].classList.add('is-active');
     setInterval(() => {
         slides[currentSlide].classList.remove('is-active');
@@ -454,17 +454,17 @@ function setupHeroSlider() {
 function setupMenuToggle() {
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay'); 
+    const overlay = document.getElementById('overlay');
     if (menuToggle && sidebar && overlay) {
         menuToggle.addEventListener('click', () => {
             menuToggle.classList.toggle('is-open');
             sidebar.classList.toggle('is-open');
-            overlay.classList.toggle('is-open'); 
+            overlay.classList.toggle('is-open');
         });
         overlay.addEventListener('click', () => {
-            menuToggle.classList.remove('is-open'); 
-            sidebar.classList.remove('is-open'); 
-            overlay.classList.remove('is-open'); 
+            menuToggle.classList.remove('is-open');
+            sidebar.classList.remove('is-open');
+            overlay.classList.remove('is-open');
         });
     }
 }
@@ -505,21 +505,21 @@ function setupLanguageSwitcher() {
     const langZH = document.getElementById('lang-zh');
 
     if (!langJP || !langEN || !langZH) return;
-    const currentPath = window.location.pathname; 
-    const searchParams = window.location.search;   
+    const currentPath = window.location.pathname;
+    const searchParams = window.location.search;
 
     let baseFile = currentPath;
 
     if (LANG_PREFIX === '-en') {
-        baseFile = currentPath.replace('/en', ''); 
+        baseFile = currentPath.replace('/en', '');
         langEN.classList.add('is-active-lang');
     } else if (LANG_PREFIX === '-zh-Hans') {
-        baseFile = currentPath.replace('/zh-Hans', ''); 
+        baseFile = currentPath.replace('/zh-Hans', '');
         langZH.classList.add('is-active-lang');
     } else {
         langJP.classList.add('is-active-lang');
     }
-    
+
     if (baseFile === '/' || baseFile === '/en/' || baseFile === '/zh-Hans/') {
         baseFile = '/index.html';
     }
@@ -539,3 +539,13 @@ function formatDate(dateString) {
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}.${m}.${d}`;
 }
+
+// ----------------------------------------------------
+// 8. Loading Screen
+// ----------------------------------------------------
+window.addEventListener('load', function () {
+    const loading = document.getElementById('loading');
+    if (loading) {
+        loading.classList.add('loaded');
+    }
+});

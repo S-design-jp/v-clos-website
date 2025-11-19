@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <script>
-  (function(d) {
-    var config = {
-      kitId: 'alx8fbs',
-      scriptTimeout: 3000,
-      async: true
-    },
-    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)})(document);
+        (function (d) {
+            var config = {
+                kitId: 'alx8fbs',
+                scriptTimeout: 3000,
+                async: true
+            },
+                h = d.documentElement, t = setTimeout(function () { h.className = h.className.replace(/\bwf-loading\b/g, "") + " wf-inactive"; }, config.scriptTimeout), tk = d.createElement("script"), f = false, s = d.getElementsByTagName("script")[0], a; h.className += " wf-loading"; tk.src = 'https://use.typekit.net/' + config.kitId + '.js'; tk.async = true; tk.onload = tk.onreadystatechange = function () { a = this.readyState; if (f || a && a != "complete" && a != "loaded") return; f = true; clearTimeout(t); try { Typekit.load(config) } catch (e) { } }; s.parentNode.insertBefore(tk, s)
+        })(document);
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIVE/EVENT | V-CLos Official Website</title> 
+    <title>LIVE/EVENT | V-CLos Official Website</title>
     <link rel="preconnect" href="https://use.typekit.net" crossorigin>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="/image/VCLosLogo.png" type="image/png">
     <link rel="apple-touch-icon" href="/image/apple-touch-icon.jpg">
-    <meta name="description" content="V-CLos LIVE/EVENT list. View information on the VOCA-Fes Series and archives of past events.">
+    <meta name="description"
+        content="V-CLos LIVE/EVENT list. View information on the VOCA-Fes Series and archives of past events.">
     <meta property="og:title" content="LIVE/EVENT | V-CLos Official Website">
-    <meta property="og:description" content="V-CLos LIVE/EVENT list. View information on t  he VOCA-Fes Series and archives of past events.">
-    <meta property="og:type" content="website"> <meta property="og:url" content="https://v-clos.jp/en/live.html">
+    <meta property="og:description"
+        content="V-CLos LIVE/EVENT list. View information on t  he VOCA-Fes Series and archives of past events.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://v-clos.jp/en/live.html">
     <meta property="og:image" content="https://pbs.twimg.com/profile_banners/1801847853918392321/1731183339/1500x500">
     <meta property="og:site_name" content="V-CLos">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LIVE/EVENT | V-CLos Official Website">
-    <meta name="twitter:description" content="V-CLos LIVE/EVENT list. View information on the VOCA-Fes Series and archives of past events.">
+    <meta name="twitter:description"
+        content="V-CLos LIVE/EVENT list. View information on the VOCA-Fes Series and archives of past events.">
     <meta name="twitter:image" content="https://pbs.twimg.com/profile_banners/1801847853918392321/1731183339/1500x500">
 </head>
+
 <body id="page-live">
+    <div id="loading">
+        <div class="loading-logo">
+            <img src="../image/04_ProjectVCLos_透過_white_mini.png" alt="V-CLos Loading">
+        </div>
+    </div>
+
     <div id="overlay" class="overlay"></div>
     <button id="menu-toggle" class="menu-toggle" aria-label="Open menu">
         <span class="bar"></span>
@@ -64,16 +77,17 @@
         </header>
 
         <section id="event-archive" class="content-section">
-            
+
             <div id="event-list-container" class="event-list-container">
                 <p class="event-loading">Loading...</p>
             </div>
-            </section>
+        </section>
 
     </main>
 
     <footer>
-        <img src="/image/04_ProjectVCLos_透過_white_mini.png" alt="V-CLos Logo" class="hero-logo" width="1080" height="498">
+        <img src="/image/04_ProjectVCLos_透過_white_mini.png" alt="V-CLos Logo" class="hero-logo" width="1080"
+            height="498">
         <ul class="footer-nav">
             <li><a href="/en/news.html">NEWS</a></li>
             <li><a href="/en/live.html">LIVE/EVENT</a></li>
@@ -83,13 +97,14 @@
         </ul>
         <ul class="footer-sub-nav">
             <li><a href="/en/policy.html">SITE POLICY</a></li>
-            
+
             <li><a href="/en/credits.html">CREDITS</a></li>
-            </ul>
-            <p class="copyright">PROJECT V-CLos</p>
+        </ul>
+        <p class="copyright">PROJECT V-CLos</p>
     </footer>
 
 
-<script src="../script.js" defer></script>
+    <script src="../script.js" defer></script>
 </body>
+
 </html>
