@@ -9,10 +9,10 @@ const config: Config = {
     theme: {
         extend: {
             fontFamily: {
-                jura: ["var(--font-jura)", "sans-serif"],
+                jura: ["futura-pt", "sans-serif"],
                 // 日本語用フォントを追加
                 // 欧文はJura、和文はNoto Sans JPが優先されるように並べると綺麗です
-                noto: ["var(--font-jura)", "var(--font-noto)", "sans-serif"],
+                noto: ["futura-pt", "var(--font-noto)", "sans-serif"],
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
