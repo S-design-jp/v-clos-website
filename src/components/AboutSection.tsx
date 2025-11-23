@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import TextScramble from "./TextScramble";
+import Link from "next/link";
 
 const BLOCKS = [
     {
@@ -110,12 +111,15 @@ export default function AboutSection() {
 
             {/* Moreボタン */}
             <div className="mt-20 flex justify-center">
-                <button className="group relative px-12 py-4 border border-white/20 rounded-full overflow-hidden transition-all hover:border-cyan-400/50">
+                <Link
+                    href="/about"
+                    className="group relative inline-block px-12 py-4 border border-white/20 rounded-full overflow-hidden transition-all hover:border-cyan-400/50"
+                >
                     <span className="relative z-10 text-sm font-jura tracking-[0.3em] group-hover:text-black transition-colors">
                         READ MORE
                     </span>
                     <div className="absolute inset-0 bg-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-center duration-300" />
-                </button>
+                </Link>
             </div>
 
         </section>
