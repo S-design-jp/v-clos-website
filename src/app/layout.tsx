@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_JP } from "next/font/google";
-import Script from "next/script"; // ★追加: Scriptコンポーネントをインポート
+import Script from "next/script";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -14,9 +14,50 @@ const notojp = Noto_Sans_JP({
   variable: "--font-noto",
 });
 
+const SITE_URL = "https://v-clos.jp";
+const SITE_NAME = "Project V-CLos";
+const SITE_DESCRIPTION = "洗足学園音楽大学 3DCGライブ制作団体 V-CLos 公式サイト。音楽-3DCG-テクノロジーの融合による次世代のエンターテイメントを追求します。";
+
 export const metadata: Metadata = {
-  title: "Project V-CLos",
-  description: "Virtual / Visual / Vocal",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: ["V-CLos", "洗足学園音楽大学", "3DCGライブ", "バーチャルライブ", "Voca-Fes"],
+
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "ja_JP",
+    type: "website",
+    images: [
+      {
+        url: "/ogp.jpg",
+        width: 1200,
+        height: 630,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: ["/ogp.jpg"],
+    creator: "@Project_V_CLos",
+  },
+
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: SITE_NAME,
+  },
 };
 
 export default function RootLayout({
@@ -27,11 +68,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        {/* 以前の <link> タグは削除してください */}
       </head>
       <body className={`${inter.className} ${notojp.variable} bg-black`}>
 
-        {/* Adobe Fonts読み込みスクリプト */}
         <Script id="adobe-fonts" strategy="afterInteractive">
           {`
             (function(d) {

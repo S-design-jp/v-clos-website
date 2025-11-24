@@ -52,7 +52,7 @@ export default function Footer() {
                     <span className="text-[10px] text-cyan-400 tracking-[0.2em] mb-2 block">SOCIAL</span>
                     <ul className="space-y-3 text-sm tracking-wider">
                         <li>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors w-fit">
+                            <a href="https://twitter.com/Project_V_CLos" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors w-fit">
                                 <span className="text-xs">𝕏</span>
                                 <span className="group-hover:translate-x-1 transition-transform">X (Twitter)</span>
                             </a>

@@ -8,7 +8,7 @@ export default function MediaSection() {
 
             {/* リンク全体を巨大なボタンにする */}
             <a
-                href="https://twitter.com" // 仮のリンク
+                href="https://twitter.com/Project_V_CLos" // 仮のリンク
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative block w-full py-32 md:py-48 overflow-hidden cursor-none"

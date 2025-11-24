@@ -165,7 +165,7 @@ export default function Home() {
               </div>
 
               <p className="mt-2 text-[10px] md:text-sm text-gray-400 tracking-widest uppercase font-jura h-6">
-                <TextScramble text="SOUND/TECHNOLOGY/REAL-LIVE/V-CLOS." duration={2000} delay={800} start={isStarted} />
+                <TextScramble text="Virtual - Connect Live of synthesis" duration={2000} delay={800} start={isStarted} />
               </p>
             </h1>
 
