@@ -64,15 +64,12 @@ export default function HeroCrystal({ mode }: Props) {
 
     const color = new THREE.Color('#000000');
 
-    // === 設定値 ===
-    // High: 高品質
-    // Mid:  中品質 (解像度とサンプルを落として軽量化)
+    // === コア用 (屈折あり) ===
+    // High / Mid で解像度を変える
     const transmissionConfig = mode === "high"
         ? { res: 512, samples: 6 }
         : { res: 256, samples: 4 };
 
-    // === 1. 屈折ガラス (High/Midのコア用) ===
-    // Midでもこれを使うことで「白さ」を回避し、透明感を出します
     const transmissionMaterial = (
         <MeshTransmissionMaterial
             thickness={0.5} roughness={0} transmission={1} ior={1.5}
@@ -82,61 +79,47 @@ export default function HeroCrystal({ mode }: Props) {
         />
     );
 
-    // === 2. 軽量ガラス (Midの破片用) ===
-    // Transmissionを使うと破片40個は重すぎるので、Physicalを使うが、
-    // 色を「白」ではなく「薄いシアン」にして違和感を消す
+    // === ★修正: 破片 & Low用 (無色透明なガラス風) ===
+    // Physicalを使わず、Standardで「黒ベース・高透明・高反射」にすることで
+    // 「計算は軽いけど、見た目はクリアなガラス」を再現します。
     const glassMaterial = (
-        <meshPhysicalMaterial
-            roughness={0}
-            metalness={0.2}
-            transmission={1}
-            thickness={0.5}
-            color="#ccffff"  // ほんのりシアン
-            ior={1.5}
-            clearcoat={1}
-        />
-    );
-
-    // === 3. ホログラム (Low用) ===
-    const lowMaterial = (
         <meshStandardMaterial
-            color="#0088FF" emissive="#00FFFF" emissiveIntensity={0.8}
-            wireframe={true} transparent={true} opacity={0.3}
+            color="#111111"       // ベースをほぼ黒にする (白く濁るのを防ぐ)
+            roughness={0}         // ツルツル
+            metalness={0.9}       // 金属光沢を上げて反射を強調
+            transparent={true}    // 透明有効
+            opacity={0.3}         // かなり薄くする
         />
     );
 
-    // === マテリアル割り当て ===
-    let coreMaterial, shardMaterial;
-
+    // マテリアル割り当て
+    let coreMaterial;
     if (mode === "low") {
-        coreMaterial = lowMaterial;
-        shardMaterial = lowMaterial;
-    } else if (mode === "mid") {
-        coreMaterial = transmissionMaterial; // Midでもコアは屈折させる！
-        shardMaterial = glassMaterial;       // 破片は軽量ガラス
+        coreMaterial = glassMaterial; // Lowはコアも軽量ガラス
     } else {
-        // High
-        coreMaterial = transmissionMaterial;
-        shardMaterial = transmissionMaterial; // Highなら全部屈折
+        coreMaterial = transmissionMaterial; // High/Midはコア屈折
     }
+
+    // 周りの破片は全モード共通で軽量ガラス
+    const shardMaterial = glassMaterial;
 
     return (
         <>
-            {/* コア: 正十二面体 (五角形の面を持つ立体) */}
+            {/* コア: 正十二面体 */}
             <mesh ref={coreRef}>
                 <dodecahedronGeometry args={[1.2, 0]} />
                 {coreMaterial}
 
-                {/* Lowモード用の芯 */}
+                {/* Lowモードの時だけ、存在感を出すために芯を入れる */}
                 {mode === "low" && (
                     <mesh>
                         <dodecahedronGeometry args={[1.15, 0]} />
-                        <meshBasicMaterial color="#000000" transparent opacity={0.5} />
+                        <meshBasicMaterial color="#000000" transparent opacity={0.2} />
                     </mesh>
                 )}
             </mesh>
 
-            {/* 破片群: 鋭利な四面体 */}
+            {/* 破片群: 四面体 */}
             <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} floatingRange={[-0.1, 0.1]}>
                 <group ref={shardsGroupRef}>
                     {shards.map((shard, i) => (
