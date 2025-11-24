@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_JP } from "next/font/google";
 import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -41,19 +42,18 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${inter.className} ${notojp.variable} bg-black`}>
-        {/* 全体をGlobalProviderで囲む */}
         <GlobalProvider>
-          <SmoothScroll />
 
-          {/* 背景・カーソル・ローディングを一括管理 (アニメーションの影響を受けない場所に配置) */}
+          {/* 2. ここを修正: Suspenseで囲む */}
+          {/* fallback={null} は「読み込み中は何も表示しない」という意味 */}
+          <Suspense fallback={null}>
+            <SmoothScroll />
+          </Suspense>
+
           <AppBackground />
-
           <HeaderLogo />
           <Navigation />
-
-          {/* ページの中身 (ここだけが template.tsx のアニメーション影響を受ける) */}
           {children}
-
           <Footer />
         </GlobalProvider>
       </body>
