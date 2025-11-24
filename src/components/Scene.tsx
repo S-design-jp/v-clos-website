@@ -1,11 +1,8 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Environment, Sparkles } from "@react-three/drei";
-import { EffectComposer, ChromaticAberration } from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
-import * as THREE from "three";
-import { useEffect, useState, Suspense, useRef } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import HeroCrystal from "./HeroCrystal";
 import FloatingImage from "./FloatingImage";
@@ -33,46 +30,6 @@ function useIsMobile() {
         return () => window.removeEventListener("resize", checkMobile);
     }, []);
     return isMobile;
-}
-
-// スクロール連動の色収差エフェクト
-function EffectsWithScroll() {
-    const chromaticRef = useRef<any>(null);
-    const lastScrollY = useRef(0);
-
-    useFrame(() => {
-        if (!chromaticRef.current) return;
-
-        const currentScrollY = window.scrollY;
-        const delta = Math.abs(currentScrollY - lastScrollY.current);
-        lastScrollY.current = currentScrollY;
-
-        // スクロール速度に応じて歪みを強くする
-        const targetIntensity = Math.min(delta * 0.002, 0.05);
-        const baseIntensity = 0.002; // 静止時の微細なズレ
-
-        // 滑らかに変化させる
-        chromaticRef.current.offset.x = THREE.MathUtils.lerp(
-            chromaticRef.current.offset.x,
-            baseIntensity + targetIntensity,
-            0.1
-        );
-        chromaticRef.current.offset.y = THREE.MathUtils.lerp(
-            chromaticRef.current.offset.y,
-            baseIntensity + targetIntensity,
-            0.1
-        );
-    });
-
-    return (
-        <EffectComposer>
-            <ChromaticAberration
-                ref={chromaticRef}
-                blendFunction={BlendFunction.NORMAL}
-                offset={[0.002, 0.002]}
-            />
-        </EffectComposer>
-    );
 }
 
 export default function Scene({ mode }: Props) {
@@ -125,6 +82,7 @@ export default function Scene({ mode }: Props) {
                 // @ts-ignore
                 camera={{ position: cameraPosition, fov: 45 }}
                 gl={{
+                    // エフェクトを削除したので、アンチエイリアスは常にONでOK
                     antialias: true,
                     alpha: true,
                     powerPreference: "high-performance",
@@ -136,9 +94,6 @@ export default function Scene({ mode }: Props) {
                 <Environment preset="city" />
 
                 <Sparkles count={200} scale={12} size={3} speed={0.4} opacity={0.5} color="#00FFFF" />
-
-                {/* エフェクト層 */}
-                <EffectsWithScroll />
 
                 {/* トップページのみ結晶と画像を表示 */}
                 {isHome && (

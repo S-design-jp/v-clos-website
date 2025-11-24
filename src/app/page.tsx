@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+// 修正: PrismCursor のインポートを削除 (AppBackgroundにあるため不要)
 import TextScramble from "@/components/TextScramble";
 import NewsSection from "@/components/NewsSection";
 import LiveSection from "@/components/LiveSection";
@@ -8,16 +9,17 @@ import AboutSection from "@/components/AboutSection";
 import MediaSection from "@/components/MediaSection";
 import { useGlobalState } from "@/context/GlobalContext";
 import type { News, Event } from "@/libs/microcms";
-import Image from "next/image";
+
+// LoadingScreen, QualitySelector も AppBackground に移動済みなので、
+// ここでのインポートと表示も不要です。削除してスッキリさせます。
+// (前回のコードでは残っていましたが、AppBackgroundと二重になるので消します)
 
 export default function Home() {
-  // グローバルステートから情報をもらう
   const { isStarted, progress, isLoaded, qualityMode } = useGlobalState();
 
   const [newsData, setNewsData] = useState<News[]>([]);
   const [eventData, setEventData] = useState<Event[]>([]);
 
-  // データ取得のみここで行う
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,13 +35,23 @@ export default function Home() {
     fetchData();
   }, []);
 
+  const MAX_DASH = 3000;
+  const currentDashOffset = isLoaded ? 0 : MAX_DASH - (MAX_DASH * (progress / 100));
 
   return (
     <main className="relative w-full min-h-screen text-white cursor-none font-sans bg-transparent">
 
+      {/* 修正: ここにあった <PrismCursor /> を削除 */}
+      {/* 修正: ここにあった <LoadingScreen /> <QualitySelector /> も削除 */}
+      {/* これらはすべて layout.tsx -> AppBackground.tsx で管理されています */}
+
       {/* qualityModeが決まったら中身を表示 */}
       {qualityMode && (
         <>
+          {/* フェードイン用カバー (page遷移時の演出用) */}
+          {/* layout側のカバーとは別に、ここでもコンテンツのフェードインを制御 */}
+          <div className={`fixed inset-0 z-[60] bg-black pointer-events-none transition-opacity duration-1000 ${isStarted ? "opacity-0" : "opacity-100"}`} />
+
           {/* === HERO SECTION === */}
           <section className="relative z-50 w-full h-screen flex flex-col justify-center items-center pointer-events-none">
             <h1 className="relative flex flex-col items-center font-bold tracking-tighter mix-blend-difference font-jura">
@@ -47,15 +59,26 @@ export default function Home() {
                 <TextScramble text="PROJECT" duration={800} delay={200} start={isStarted} />
               </span>
 
-              <div className={`relative w-[90vw] md:w-[600px] h-auto transition-opacity duration-1000 ${isStarted ? "opacity-100" : "opacity-0"}`}>
-                <Image
-                  src="/logo.png"
-                  alt="V-CLos"
-                  width={600}
-                  height={160}
-                  priority
-                  className="w-full h-auto object-contain"
-                />
+              <div className="relative w-[90vw] h-[60px] md:w-[600px] md:h-[160px]">
+                <svg className="w-full h-full overflow-visible" viewBox="0 0 400 100">
+                  <text
+                    x="50%"
+                    y="50%"
+                    dominantBaseline="middle"
+                    textAnchor="middle"
+                    className="font-jura font-bold text-6xl md:text-8xl"
+                    strokeWidth="1.5"
+                    style={{
+                      stroke: isStarted ? "transparent" : "white",
+                      fill: isStarted ? "white" : "transparent",
+                      strokeDasharray: MAX_DASH,
+                      strokeDashoffset: currentDashOffset,
+                      transition: "fill 1s ease, stroke 1s ease"
+                    }}
+                  >
+                    V-CLos
+                  </text>
+                </svg>
               </div>
 
               <p className="mt-2 text-[10px] md:text-sm text-gray-400 tracking-widest uppercase font-jura h-6">
@@ -75,7 +98,6 @@ export default function Home() {
           <LiveSection events={eventData} />
           <AboutSection />
           <MediaSection />
-          {/* Footerはlayout.tsxに移動したのでここでは不要 */}
         </>
       )}
     </main>
