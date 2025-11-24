@@ -12,7 +12,8 @@ interface Props {
 }
 
 export default function HeroCrystal({ mode }: Props) {
-    const groupRef = useRef<THREE.Group>(null);
+    const shardsGroupRef = useRef<THREE.Group>(null);
+    const coreRef = useRef<THREE.Mesh>(null);
 
     const shards = useMemo(() => {
         return new Array(SHARD_COUNT).fill(0).map(() => {
@@ -32,17 +33,41 @@ export default function HeroCrystal({ mode }: Props) {
     }, []);
 
     useFrame((state, delta) => {
-        if (groupRef.current) {
-            groupRef.current.rotation.y -= delta * 0.02;
-            groupRef.current.rotation.z -= delta * 0.005;
+        if (shardsGroupRef.current) {
+            shardsGroupRef.current.rotation.y -= delta * 0.02;
+            shardsGroupRef.current.rotation.z -= delta * 0.005;
+        }
+
+        if (coreRef.current) {
+            const scrollY = window.scrollY;
+            const progress = Math.min(scrollY / 500, 1);
+
+            const targetX = THREE.MathUtils.lerp(0, -3.5, progress);
+            const targetY = THREE.MathUtils.lerp(0, -1.0, progress);
+            const targetZ = THREE.MathUtils.lerp(0, 1.0, progress);
+            coreRef.current.position.set(targetX, targetY, targetZ);
+
+            const targetScale = THREE.MathUtils.lerp(0.5, 4.0, progress);
+            coreRef.current.scale.setScalar(targetScale);
+
+            coreRef.current.rotation.y += delta * 0.1;
+            coreRef.current.rotation.z += delta * 0.05;
+            coreRef.current.rotation.x = scrollY * 0.0005;
         }
     });
 
     const color = new THREE.Color('#000000');
 
-    // === 1. Highモード (中央コア専用) ===
-    // 屈折あり。重厚なガラス。
-    const highMaterial = (
+    // === 設定値の出し分け ===
+    // High: 解像度512, サンプル6 (超美麗)
+    // Mid:  解像度256, サンプル3 (少し粗いが屈折する。負荷はHighの約半分)
+    const config = mode === "high"
+        ? { res: 512, samples: 6 }
+        : { res: 256, samples: 3 };
+
+    // === 1. 屈折ガラスマテリアル (High / Mid 共通) ===
+    // 設定値(config)だけ切り替えて、どちらも「歪むガラス」にする
+    const transmissionMaterial = (
         <MeshTransmissionMaterial
             thickness={0.5}
             roughness={0}
@@ -54,48 +79,49 @@ export default function HeroCrystal({ mode }: Props) {
             distortionScale={0.5}
             temporalDistortion={0.1}
             background={color}
-            resolution={512}
-            samples={6}
+            resolution={config.res}     // 可変
+            samples={config.samples}    // 可変
         />
     );
 
-    // === 2. Midモード & 破片用 (軽量ホログラム) ===
-    // ★修正: "白" ではなく "シアン色の発光体" に変更
-    const glassMaterial = (
+    // === 2. 軽量ホログラムマテリアル (Lowのみ) ===
+    const lowMaterial = (
         <meshStandardMaterial
-            color="#00FFFF"       // シアン色
-            emissive="#004444"    // ほんのり発光させる
+            color="#00FFFF"
+            emissive="#004444"
             emissiveIntensity={0.5}
-            roughness={0.1}       // ツルツルに
-            metalness={0.8}       // 金属光沢
-            transparent={true}    // 透明有効
-            opacity={0.4}         // 半透明
+            roughness={0.1}
+            metalness={0.8}
+            transparent={true}
+            opacity={0.6}
         />
     );
 
-    // 中央のコアだけモードによって切り替える
-    const coreMaterial = mode === "high" ? highMaterial : glassMaterial;
+    // モード判定
+    const isLow = mode === "low";
 
-    // 破片は常に軽量マテリアルを使う
-    const shardMaterial = glassMaterial;
+    // High/Midなら屈折ガラス、Lowならホログラム
+    const materialToUse = isLow ? lowMaterial : transmissionMaterial;
 
     return (
-        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} floatingRange={[-0.1, 0.1]}>
-            <group ref={groupRef}>
-                {/* メインの核 */}
-                <mesh>
-                    <octahedronGeometry args={[1.2, 0]} />
-                    {coreMaterial}
-                </mesh>
+        <>
+            {/* コア */}
+            <mesh ref={coreRef}>
+                <icosahedronGeometry args={[1, 0]} />
+                {materialToUse}
+            </mesh>
 
-                {/* 周りの破片 */}
-                {shards.map((shard, i) => (
-                    <mesh key={i} position={shard.position} rotation={shard.rotation} scale={shard.scale}>
-                        <tetrahedronGeometry args={[1, 0]} />
-                        {shardMaterial}
-                    </mesh>
-                ))}
-            </group>
-        </Float>
+            {/* 破片群 */}
+            <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} floatingRange={[-0.1, 0.1]}>
+                <group ref={shardsGroupRef}>
+                    {shards.map((shard, i) => (
+                        <mesh key={i} position={shard.position} rotation={shard.rotation} scale={shard.scale}>
+                            <tetrahedronGeometry args={[1, 0]} />
+                            {materialToUse}
+                        </mesh>
+                    ))}
+                </group>
+            </Float>
+        </>
     );
 }

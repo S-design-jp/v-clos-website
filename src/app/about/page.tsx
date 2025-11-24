@@ -60,7 +60,7 @@ export default function AboutPage() {
                             V-CLosは、洗足学園音楽大学の学生が主体となり、次世代のエンターテイメントを追求する3DCGライブ制作団体です。
                         </p>
                         <p>
-                            私たちが目指すのは、単なるファンメイドライブの枠を超え、音楽大学だからこそ可能な<span className="text-white font-bold">「生演奏の圧倒的な熱量」</span>と、モーションキャプチャシステムを駆使した<span className="text-white font-bold">「最先端の3DCG技術」</span>とを融合させた、唯一無二のバーチャル体験です。
+                            私たちが目指すのは、音楽大学だからこそ可能な<span className="text-white font-bold">「生演奏の圧倒的な熱量」</span>と、モーションキャプチャシステムを駆使した<span className="text-white font-bold">「最先端の3DCG技術」</span>とを融合させた、唯一無二のバーチャル体験です。
                         </p>
                         <p>
                             企画から演奏、サウンドデザイン、CGモーション、そして映像演出に至るまで。そのすべてを学生の手で創造し、私たちにしかできない革新的な表現を発信し続けます。

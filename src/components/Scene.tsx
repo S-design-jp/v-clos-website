@@ -1,11 +1,11 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber"; // useFrameを追加
 import { Environment, Sparkles } from "@react-three/drei";
-import { useEffect, useState, Suspense } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState, Suspense, useRef } from "react"; // useRefを追加
 import HeroCrystal from "./HeroCrystal";
 import FloatingImage from "./FloatingImage";
+import * as THREE from "three"; // THREEを追加
 
 const IMAGE_DATA = [
     { url: "/images/live1.jpg", position: [3.5, 2.0, -3], rotation: [0, -25, 5], scale: 1.4, speed: 0.15 },
@@ -20,7 +20,6 @@ interface Props {
     mode: "high" | "mid" | "low";
 }
 
-// スマホ判定フック
 function useIsMobile() {
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -32,13 +31,38 @@ function useIsMobile() {
     return isMobile;
 }
 
+function OrbitingLight() {
+    const lightRef = useRef<THREE.SpotLight>(null);
+
+    useFrame(({ clock }) => {
+        if (!lightRef.current) return;
+
+        const t = clock.elapsedTime * 0.5;
+        const radius = 8;
+
+        lightRef.current.position.x = Math.sin(t) * radius;
+        lightRef.current.position.z = Math.cos(t) * radius;
+
+        lightRef.current.lookAt(0, 0, 0);
+    });
+
+    return (
+        <spotLight
+            ref={lightRef}
+            position={[0, 5, 0]}
+            intensity={200}
+            angle={0.5}
+            penumbra={1}
+            color="#FF8800"
+            distance={20}
+            decay={2}
+        />
+    );
+}
+
 export default function Scene({ mode }: Props) {
     const [isVisible, setIsVisible] = useState(true);
     const isMobile = useIsMobile();
-    const pathname = usePathname();
-
-    // トップページのみ3Dオブジェクトを表示
-    const isHome = pathname === "/";
 
     useEffect(() => {
         const handleVisibilityChange = () => {
@@ -50,26 +74,19 @@ export default function Scene({ mode }: Props) {
         };
     }, []);
 
-    // === Lowモード (軽量版: 3D停止) ===
     if (mode === "low") {
         return (
             <div className="fixed top-0 left-0 w-full h-full z-0 bg-black pointer-events-none overflow-hidden">
-                {/* トップページなら背景画像あり */}
-                {isHome && (
-                    <div
-                        className="absolute inset-0 bg-cover bg-center opacity-40"
-                        style={{ backgroundImage: "url(/images/live1.jpg)" }}
-                    />
-                )}
-                {/* グリッド装飾 */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center opacity-40"
+                    style={{ backgroundImage: "url(/images/live1.jpg)" }}
+                />
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
-                {/* フェード */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
             </div>
         );
     }
 
-    // === High / Mid モード (3D有効) ===
     const dpr = mode === "high" ? [1, 2] : [1, 1];
     const cameraPosition = isMobile ? [0, 0, 9] : [0, 0, 5];
 
@@ -82,7 +99,6 @@ export default function Scene({ mode }: Props) {
                 // @ts-ignore
                 camera={{ position: cameraPosition, fov: 45 }}
                 gl={{
-                    // エフェクトを削除したので、アンチエイリアスは常にONでOK
                     antialias: true,
                     alpha: true,
                     powerPreference: "high-performance",
@@ -93,27 +109,27 @@ export default function Scene({ mode }: Props) {
                 <fog attach="fog" args={['#000000', 5, 15]} />
                 <Environment preset="city" />
 
+                {/* ★追加: 周回ライト (High/Midモードのみ) */}
+                <OrbitingLight />
+
                 <Sparkles count={200} scale={12} size={3} speed={0.4} opacity={0.5} color="#00FFFF" />
 
-                {/* トップページのみ結晶と画像を表示 */}
-                {isHome && (
-                    <Suspense fallback={null}>
-                        <HeroCrystal mode={mode} />
+                <Suspense fallback={null}>
+                    <HeroCrystal mode={mode} />
 
-                        {IMAGE_DATA.map((data, index) => (
-                            <FloatingImage
-                                key={index}
-                                url={data.url}
-                                // @ts-ignore
-                                position={data.position}
-                                // @ts-ignore
-                                rotation={data.rotation}
-                                scale={data.scale}
-                                speed={data.speed}
-                            />
-                        ))}
-                    </Suspense>
-                )}
+                    {IMAGE_DATA.map((data, index) => (
+                        <FloatingImage
+                            key={index}
+                            url={data.url}
+                            // @ts-ignore
+                            position={data.position}
+                            // @ts-ignore
+                            rotation={data.rotation}
+                            scale={data.scale}
+                            speed={data.speed}
+                        />
+                    ))}
+                </Suspense>
             </Canvas>
         </div>
     );
