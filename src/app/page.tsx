@@ -8,6 +8,7 @@ import AboutSection from "@/components/AboutSection";
 import MediaSection from "@/components/MediaSection";
 import { useGlobalState } from "@/context/GlobalContext";
 import type { News, Event } from "@/libs/microcms";
+import Image from "next/image";
 
 export default function Home() {
   // グローバルステートから情報をもらう
@@ -32,9 +33,6 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // ロゴ線画の設定
-  const MAX_DASH = 3000;
-  const currentDashOffset = isLoaded ? 0 : MAX_DASH - (MAX_DASH * (progress / 100));
 
   return (
     <main className="relative w-full min-h-screen text-white cursor-none font-sans bg-transparent">
@@ -49,26 +47,15 @@ export default function Home() {
                 <TextScramble text="PROJECT" duration={800} delay={200} start={isStarted} />
               </span>
 
-              <div className="relative w-[90vw] h-[60px] md:w-[600px] md:h-[160px]">
-                <svg className="w-full h-full overflow-visible" viewBox="0 0 400 100">
-                  <text
-                    x="50%"
-                    y="50%"
-                    dominantBaseline="middle"
-                    textAnchor="middle"
-                    className="font-jura font-bold text-6xl md:text-8xl"
-                    strokeWidth="1.5"
-                    style={{
-                      stroke: isStarted ? "transparent" : "white",
-                      fill: isStarted ? "white" : "transparent",
-                      strokeDasharray: MAX_DASH,
-                      strokeDashoffset: currentDashOffset,
-                      transition: "fill 1s ease, stroke 1s ease"
-                    }}
-                  >
-                    V-CLos
-                  </text>
-                </svg>
+              <div className={`relative w-[90vw] md:w-[600px] h-auto transition-opacity duration-1000 ${isStarted ? "opacity-100" : "opacity-0"}`}>
+                <Image
+                  src="/logo.png"
+                  alt="V-CLos"
+                  width={600}
+                  height={160}
+                  priority
+                  className="w-full h-auto object-contain"
+                />
               </div>
 
               <p className="mt-2 text-[10px] md:text-sm text-gray-400 tracking-widest uppercase font-jura h-6">

@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: "*",
             allow: "/",
         },
-        sitemap: "https://v-clos.com/sitemap.xml", // ドメイン書き換えをお忘れなく
+        sitemap: "https://v-clos.jp/sitemap.xml",
     };
 }

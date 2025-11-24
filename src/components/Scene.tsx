@@ -1,9 +1,12 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Sparkles } from "@react-three/drei";
-import { useEffect, useState, Suspense } from "react";
-import { usePathname } from "next/navigation"; // 追加
+import { EffectComposer, ChromaticAberration } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
+import * as THREE from "three";
+import { useEffect, useState, Suspense, useRef } from "react";
+import { usePathname } from "next/navigation";
 import HeroCrystal from "./HeroCrystal";
 import FloatingImage from "./FloatingImage";
 
@@ -11,15 +14,16 @@ const IMAGE_DATA = [
     { url: "/images/live1.jpg", position: [3.5, 2.0, -3], rotation: [0, -25, 5], scale: 1.4, speed: 0.15 },
     { url: "/images/live2.jpg", position: [-3.0, -2.5, 0], rotation: [0, 40, -5], scale: 1.1, speed: -0.1 },
     { url: "/images/live3.jpg", position: [0, -3.5, -5], rotation: [-10, 0, 0], scale: 1.8, speed: 0.05 },
-    { url: "/images/live4.jpg", position: [-4.0, 2.5, -4], rotation: [10, 30, 10], scale: 1.5, speed: -0.12 },
-    { url: "/images/live5.jpg", position: [3.0, -3.0, 1.5], rotation: [0, -40, 0], scale: 0.9, speed: 0.2 },
-    { url: "/images/live6.jpg", position: [1.0, 4.0, -6], rotation: [20, 0, -10], scale: 2.0, speed: 0.08 }
+    { url: "/images/live1.jpg", position: [-4.0, 2.5, -4], rotation: [10, 30, 10], scale: 1.5, speed: -0.12 },
+    { url: "/images/live2.jpg", position: [3.0, -3.0, 1.5], rotation: [0, -40, 0], scale: 0.9, speed: 0.2 },
+    { url: "/images/live3.jpg", position: [1.0, 4.0, -6], rotation: [20, 0, -10], scale: 2.0, speed: 0.08 }
 ];
 
 interface Props {
     mode: "high" | "mid" | "low";
 }
 
+// スマホ判定フック
 function useIsMobile() {
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
@@ -30,9 +34,54 @@ function useIsMobile() {
     }, []);
     return isMobile;
 }
+
+// スクロール連動の色収差エフェクト
+function EffectsWithScroll() {
+    const chromaticRef = useRef<any>(null);
+    const lastScrollY = useRef(0);
+
+    useFrame(() => {
+        if (!chromaticRef.current) return;
+
+        const currentScrollY = window.scrollY;
+        const delta = Math.abs(currentScrollY - lastScrollY.current);
+        lastScrollY.current = currentScrollY;
+
+        // スクロール速度に応じて歪みを強くする
+        const targetIntensity = Math.min(delta * 0.002, 0.05);
+        const baseIntensity = 0.002; // 静止時の微細なズレ
+
+        // 滑らかに変化させる
+        chromaticRef.current.offset.x = THREE.MathUtils.lerp(
+            chromaticRef.current.offset.x,
+            baseIntensity + targetIntensity,
+            0.1
+        );
+        chromaticRef.current.offset.y = THREE.MathUtils.lerp(
+            chromaticRef.current.offset.y,
+            baseIntensity + targetIntensity,
+            0.1
+        );
+    });
+
+    return (
+        <EffectComposer>
+            <ChromaticAberration
+                ref={chromaticRef}
+                blendFunction={BlendFunction.NORMAL}
+                offset={[0.002, 0.002]}
+            />
+        </EffectComposer>
+    );
+}
+
 export default function Scene({ mode }: Props) {
     const [isVisible, setIsVisible] = useState(true);
     const isMobile = useIsMobile();
+    const pathname = usePathname();
+
+    // トップページのみ3Dオブジェクトを表示
+    const isHome = pathname === "/";
 
     useEffect(() => {
         const handleVisibilityChange = () => {
@@ -44,22 +93,26 @@ export default function Scene({ mode }: Props) {
         };
     }, []);
 
-    // 1. Lowモードならここで終了 (return)
+    // === Lowモード (軽量版: 3D停止) ===
     if (mode === "low") {
         return (
             <div className="fixed top-0 left-0 w-full h-full z-0 bg-black pointer-events-none overflow-hidden">
-                <div
-                    className="absolute inset-0 bg-cover bg-center opacity-40"
-                    style={{ backgroundImage: "url(/images/live1.jpg)" }}
-                />
+                {/* トップページなら背景画像あり */}
+                {isHome && (
+                    <div
+                        className="absolute inset-0 bg-cover bg-center opacity-40"
+                        style={{ backgroundImage: "url(/images/live1.jpg)" }}
+                    />
+                )}
+                {/* グリッド装飾 */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
+                {/* フェード */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
             </div>
         );
     }
 
-    // === 2. ここより下は High か Mid 確定 ===
-
+    // === High / Mid モード (3D有効) ===
     const dpr = mode === "high" ? [1, 2] : [1, 1];
     const cameraPosition = isMobile ? [0, 0, 9] : [0, 0, 5];
 
@@ -72,7 +125,7 @@ export default function Scene({ mode }: Props) {
                 // @ts-ignore
                 camera={{ position: cameraPosition, fov: 45 }}
                 gl={{
-                    antialias: true, // 修正: Low以外なら常にONでいいので true に固定
+                    antialias: true,
                     alpha: true,
                     powerPreference: "high-performance",
                     stencil: false,
@@ -82,25 +135,30 @@ export default function Scene({ mode }: Props) {
                 <fog attach="fog" args={['#000000', 5, 15]} />
                 <Environment preset="city" />
 
-                {/* 修正: Low以外なら常に表示でいいので条件分岐を削除 */}
                 <Sparkles count={200} scale={12} size={3} speed={0.4} opacity={0.5} color="#00FFFF" />
 
-                <Suspense fallback={null}>
-                    <HeroCrystal mode={mode} />
+                {/* エフェクト層 */}
+                <EffectsWithScroll />
 
-                    {IMAGE_DATA.map((data, index) => (
-                        <FloatingImage
-                            key={index}
-                            url={data.url}
-                            // @ts-ignore
-                            position={data.position}
-                            // @ts-ignore
-                            rotation={data.rotation}
-                            scale={data.scale}
-                            speed={data.speed}
-                        />
-                    ))}
-                </Suspense>
+                {/* トップページのみ結晶と画像を表示 */}
+                {isHome && (
+                    <Suspense fallback={null}>
+                        <HeroCrystal mode={mode} />
+
+                        {IMAGE_DATA.map((data, index) => (
+                            <FloatingImage
+                                key={index}
+                                url={data.url}
+                                // @ts-ignore
+                                position={data.position}
+                                // @ts-ignore
+                                rotation={data.rotation}
+                                scale={data.scale}
+                                speed={data.speed}
+                            />
+                        ))}
+                    </Suspense>
+                )}
             </Canvas>
         </div>
     );
