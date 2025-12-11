@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import TextScramble from "./TextScramble";
+//import TextScramble from "./TextScramble";
 
 const MENU_ITEMS = [
     { label: "TOP", href: "/" },
@@ -68,10 +68,10 @@ export default function Navigation() {
                                 onClick={() => setIsOpen(false)}
                                 className={`group relative block w-fit text-2xl md:text-5xl font-jura font-bold tracking-widest text-transparent stroke-text hover:text-white transition-all duration-500 transform ${isOpen ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"
                                     }`}
-                                style={{ transitionDelay: `${index * 100 + 200}ms` }}
+                                style={{ transitionDelay: `${index * 50 + 200}ms` }}
                             >
                                 <span className="relative z-10 block group-hover:translate-x-4 transition-transform duration-300">
-                                    <TextScramble text={item.label} duration={800} delay={index * 100 + 400} start={isOpen} />
+                                    {item.label}
                                 </span>
                                 <div className="absolute -bottom-2 left-0 w-0 h-[2px] bg-cyan-400 group-hover:w-full transition-all duration-300" />
                             </a>

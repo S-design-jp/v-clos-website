@@ -83,10 +83,10 @@ export default function AboutPage() {
                             「VOCA-Fes Series」は、V-CLosが総力を結集して送るフラッグシップ・ライブプロジェクトです。
                         </p>
                         <p>
-                            その核にあるのは<span className="text-white font-bold border-b border-cyan-500/50">「生演奏への徹底的なこだわり」</span>です。 他の多くのファンメイドライブが事前に録音された音源（前録り）を使用する中、VOCA-Fesではリアルタイムのバンド演奏が熱狂のグルーヴを生み出します。
+                            その核にあるのは<span className="text-white font-bold border-b border-cyan-500/50">「生演奏への徹底的なこだわり」</span>です。 VOCA-Fesではリアルタイムのバンド演奏が熱狂のグルーヴを生み出します。
                         </p>
                         <p>
-                            また、このシリーズは私たちの<span className="text-white font-bold">「研究の結晶」</span>でもあります。 毎公演、「毎公演異なる技術的挑戦」をテーマに掲げ、ファンメイドライブの新たな可能性を切り開きます。
+                            また、このシリーズは私たちの<span className="text-white font-bold">「研究の結晶」</span>でもあります。 「毎公演異なる技術的挑戦」をテーマに掲げ、ファンメイドライブの新たな可能性を切り開きます。
                         </p>
                     </div>
                 </section>
