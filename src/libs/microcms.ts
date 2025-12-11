@@ -38,48 +38,58 @@ export type Event = {
 
 // --- データ取得関数 ---
 
+// ニュース一覧を取得
 export const getNews = async () => {
     const data = await client.get({
-        endpoint: "news", // エンドポイント名
-        queries: { limit: 3 } // 最新3件
+        endpoint: "news",
+        queries: { limit: 3 }
     });
     return data.contents as News[];
 };
 
+// イベント一覧を取得
 export const getEvents = async () => {
     const data = await client.get({
-        endpoint: "events", // エンドポイント名: events
+        endpoint: "events",
         queries: { limit: 3 }
     });
     return data.contents as Event[];
 };
-export const getNewsDetail = async (contentId: string) => {
+
+// ★修正: ニュース詳細 (プレビュー対応)
+export const getNewsDetail = async (contentId: string, draftKey?: string) => {
     const data = await client.getListDetail<News>({
         endpoint: "news",
         contentId,
+        queries: {
+            draftKey: draftKey // draftKeyがあれば渡す
+        }
     });
     return data;
 };
 
-// イベント詳細を取得
-export const getEventDetail = async (contentId: string) => {
+// ★修正: イベント詳細 (プレビュー対応)
+export const getEventDetail = async (contentId: string, draftKey?: string) => {
     const data = await client.getListDetail<Event>({
         endpoint: "events",
         contentId,
+        queries: {
+            draftKey: draftKey // draftKeyがあれば渡す
+        }
     });
     return data;
 };
 
-// ニュース一覧を件数指定で取得 (ページネーション用など)
+// 全ニュース取得
 export const getAllNews = async () => {
     const data = await client.get({
         endpoint: "news",
-        queries: { limit: 100 } // とりあえず100件
+        queries: { limit: 100 }
     });
     return data.contents as News[];
 };
 
-// イベント一覧を件数指定で取得
+// 全イベント取得
 export const getAllEvents = async () => {
     const data = await client.get({
         endpoint: "events",
