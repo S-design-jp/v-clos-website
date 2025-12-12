@@ -1,7 +1,14 @@
 import { getNewsDetail, getAllNews } from "@/libs/microcms";
+import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import parse from "html-react-parser";
 
+type Props = {
+    params: Promise<{ id: string }>;
+    searchParams: Promise<{ dk?: string }>; // クエリパラメータ(dk)を受け取る
+};
+
+// 静的パス生成 (公開済みの記事だけHTML化しておく)
 export async function generateStaticParams() {
     const contents = await getAllNews();
     return contents.map((post) => ({
@@ -9,57 +16,48 @@ export async function generateStaticParams() {
     }));
 }
 
-interface Props {
-    params: Promise<{ id: string }>; // Promise型に変更
-}
-
-export default async function NewsDetailPage({ params }: Props) {
-    // ★ここが重要: params を await してから id を取り出す
+export default async function NewsDetailPage({ params, searchParams }: Props) {
     const { id } = await params;
+    const { dk } = await searchParams; // URLからdraftKey(dk)を取得
+    const { isEnabled } = await draftMode(); // プレビューモードかどうか
 
-    const post = await getNewsDetail(id).catch(() => null);
+    // データを取得
+    // プレビューモードなら draftKey を渡す。通常なら undefined
+    const post = await getNewsDetail(id, isEnabled ? dk : undefined).catch(() => null);
 
+    // 記事が見つからなければ404
     if (!post) {
         notFound();
     }
 
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
-    };
-
     return (
-        <main className="relative w-full min-h-screen text-white pt-40 pb-20 px-6 bg-black font-noto">
+        <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6 font-sans">
+            {/* プレビュー中であることを表示するバー */}
+            {isEnabled && (
+                <div className="fixed top-0 left-0 w-full bg-yellow-500 text-black text-center py-2 z-[1000] font-bold font-jura tracking-widest">
+                    PREVIEW MODE
+                    <a href="/api/disable-draft" className="ml-4 underline opacity-70 hover:opacity-100">Exit</a>
+                </div>
+            )}
 
-            <article className="max-w-3xl mx-auto">
-                <header className="mb-16 border-b border-white/20 pb-8">
-                    <div className="font-jura text-cyan-400 tracking-widest mb-4">
-                        {formatDate(post.publishedAt)}
+            <article className="max-w-4xl mx-auto">
+                <div className="mb-10 border-b border-white/20 pb-10">
+                    <div className="flex items-center gap-4 text-gray-400 font-jura text-sm mb-4">
+                        <time dateTime={post.publishedAt}>
+                            {new Date(post.publishedAt).toLocaleDateString()}
+                        </time>
+                        <span className="px-2 py-0.5 border border-white/20 text-xs">NEWS</span>
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+
+                    <h1 className="text-3xl md:text-5xl font-bold leading-tight font-noto">
                         {post.title}
                     </h1>
-                </header>
+                </div>
 
-                <div
-                    className="prose prose-invert prose-lg max-w-none
-            prose-headings:font-bold prose-headings:text-white 
-            prose-p:text-gray-300 prose-p:leading-loose
-            prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline
-            prose-img:rounded-lg prose-img:border prose-img:border-white/10"
-                    dangerouslySetInnerHTML={{ __html: post.body }}
-                />
+                <div className="prose prose-invert prose-lg max-w-none font-noto">
+                    {parse(post.body)}
+                </div>
             </article>
-
-            <div className="max-w-3xl mx-auto mt-20 text-center">
-                <Link
-                    href="/news"
-                    className="inline-block px-8 py-3 border border-white/20 hover:border-cyan-400 hover:text-cyan-400 transition-colors font-jura tracking-widest text-sm"
-                >
-                    BACK TO LIST
-                </Link>
-            </div>
-
         </main>
     );
 }
