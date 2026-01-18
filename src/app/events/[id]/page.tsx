@@ -2,6 +2,7 @@ import { getEventDetail, getAllEvents } from "@/libs/microcms";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import parse from "html-react-parser";
 
 type Props = {
     params: Promise<{ id: string }>;
@@ -67,7 +68,7 @@ export default async function EventDetailPage({ params, searchParams }: Props) {
 
                 {post.description && (
                     <div className="prose prose-invert prose-lg max-w-none font-noto whitespace-pre-wrap">
-                        {post.description}
+                        {parse(post.description)}
                     </div>
                 )}
             </article>
