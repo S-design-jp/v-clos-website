@@ -25,6 +25,9 @@ export const metadata: Metadata = {
     default: "V-CLos | Virtual-Connect Live of synthesis",
   },
   description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLos（ブイクロス）の公式サイトです。生演奏とモーションキャプチャを融合させた次世代のライブエンターテインメントを創造します。",
+  verification: {
+    google: "JvC-MoaOKYvPls4XTWFBu0-uvoO4f2zcMmovQY82jPM",
+  },
   openGraph: {
     title: "V-CLos Official Website",
     description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLosの公式サイト。",
