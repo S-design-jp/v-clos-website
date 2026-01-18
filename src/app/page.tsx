@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// 修正: PrismCursor のインポートを削除 (AppBackgroundにあるため不要)
 import TextScramble from "@/components/TextScramble";
 import NewsSection from "@/components/NewsSection";
 import LiveSection from "@/components/LiveSection";
@@ -10,16 +9,13 @@ import MediaSection from "@/components/MediaSection";
 import { useGlobalState } from "@/context/GlobalContext";
 import type { News, Event } from "@/libs/microcms";
 
-// LoadingScreen, QualitySelector も AppBackground に移動済みなので、
-// ここでのインポートと表示も不要です。削除してスッキリさせます。
-// (前回のコードでは残っていましたが、AppBackgroundと二重になるので消します)
-
 export default function Home() {
   const { isStarted, progress, isLoaded, qualityMode } = useGlobalState();
 
   const [newsData, setNewsData] = useState<News[]>([]);
   const [eventData, setEventData] = useState<Event[]>([]);
 
+  // クライアントサイドでデータフェッチ (API経由)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,26 +31,27 @@ export default function Home() {
     fetchData();
   }, []);
 
+  // SVGアニメーション用の計算
   const MAX_DASH = 3000;
+  // ロード完了前はプログレスに応じて描画、ロード完了後(isLoaded=true)は完全に描画(offset=0)
   const currentDashOffset = isLoaded ? 0 : MAX_DASH - (MAX_DASH * (progress / 100));
 
   return (
     <main className="relative w-full min-h-screen text-white cursor-none font-sans bg-transparent">
 
-      {/* 修正: ここにあった <PrismCursor /> を削除 */}
-      {/* 修正: ここにあった <LoadingScreen /> <QualitySelector /> も削除 */}
-      {/* これらはすべて layout.tsx -> AppBackground.tsx で管理されています */}
-
-      {/* qualityModeが決まったら中身を表示 */}
+      {/* qualityModeが決定されたらコンテンツを表示 */}
       {qualityMode && (
         <>
-          {/* フェードイン用カバー (page遷移時の演出用) */}
-          {/* layout側のカバーとは別に、ここでもコンテンツのフェードインを制御 */}
-          <div className={`fixed inset-0 z-[60] bg-black pointer-events-none transition-opacity duration-1000 ${isStarted ? "opacity-0" : "opacity-100"}`} />
+          {/* コンテンツ用のフェードインカバー */}
+          <div
+            className={`fixed inset-0 z-[60] bg-black pointer-events-none transition-opacity duration-1000 ${isStarted ? "opacity-0" : "opacity-100"
+              }`}
+          />
 
           {/* === HERO SECTION === */}
           <section className="relative z-50 w-full h-screen flex flex-col justify-center items-center pointer-events-none">
             <h1 className="relative flex flex-col items-center font-bold tracking-tighter mix-blend-difference font-jura">
+
               <span className="block text-cyan-400 opacity-80 text-[10px] md:text-sm tracking-[0.5em] md:tracking-[1em] mb-2 md:mb-4 pl-2 h-6">
                 <TextScramble text="PROJECT" duration={800} delay={200} start={isStarted} />
               </span>
@@ -94,6 +91,7 @@ export default function Home() {
             )}
           </section>
 
+          {/* 各セクション */}
           <NewsSection news={newsData} />
           <LiveSection events={eventData} />
           <AboutSection />
