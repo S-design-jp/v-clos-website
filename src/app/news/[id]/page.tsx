@@ -68,12 +68,15 @@ export default async function NewsDetailPage({ params, searchParams }: Props) {
                         <span className="px-2 py-0.5 border border-white/20 text-xs">NEWS</span>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-bold leading-tight font-noto">
+                    <h1 className="text-xl md:text-5xl font-bold leading-tight font-noto">
                         {post.title}
                     </h1>
                 </div>
 
                 <div className="prose prose-invert prose-lg max-w-none font-noto">
+                    {parse(post.body)}
+                </div>
+                <div className="prose prose-invert prose-sm md:prose-lg max-w-none font-noto">
                     {parse(post.body)}
                 </div>
             </article>

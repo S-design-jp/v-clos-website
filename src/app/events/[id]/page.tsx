@@ -93,7 +93,7 @@ export default async function EventDetailPage({ params, searchParams }: Props) {
                 </div>
 
                 {post.description && (
-                    <div className="prose prose-invert prose-lg max-w-none font-noto whitespace-pre-wrap">
+                    <div className="prose prose-invert prose-sm md:prose-lg max-w-none font-noto whitespace-pre-wrap">
                         {parse(post.description)}
                     </div>
                 )}
