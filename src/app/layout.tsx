@@ -9,6 +9,7 @@ import HeaderLogo from "@/components/HeaderLogo";
 import Footer from "@/components/Footer";
 import { GlobalProvider } from "@/context/GlobalContext";
 import AppBackground from "@/components/AppBackground";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({ subsets: ["latin"] });
 const notojp = Noto_Sans_JP({
@@ -18,7 +19,7 @@ const notojp = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://v-clos.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://v-clos.jp"),
 
   title: {
     template: "%s | V-CLos",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "V-CLos Official Website",
     description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLosの公式サイト。",
-    url: "https://v-clos.com",
+    url: "https://v-clos.jp",
     siteName: "V-CLos",
     locale: "ja_JP",
     type: "website",
@@ -73,8 +74,7 @@ export default function RootLayout({
       <body className={`${inter.className} ${notojp.variable} bg-black`}>
         <GlobalProvider>
 
-          {/* 2. ここを修正: Suspenseで囲む */}
-          {/* fallback={null} は「読み込み中は何も表示しない」という意味 */}
+
           <Suspense fallback={null}>
             <SmoothScroll />
           </Suspense>
@@ -85,6 +85,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </GlobalProvider>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>
   );
