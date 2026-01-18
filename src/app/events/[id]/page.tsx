@@ -1,4 +1,5 @@
 import { getEventDetail, getAllEvents } from "@/libs/microcms";
+import { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -8,6 +9,31 @@ type Props = {
     params: Promise<{ id: string }>;
     searchParams: Promise<{ dk?: string }>;
 };
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+    const { id } = await params;
+    const { dk } = await searchParams;
+
+    const post = await getEventDetail(id, dk).catch(() => null);
+
+    if (!post) {
+        return { title: "Event Not Found" };
+    }
+    const images = post.mainImage
+        ? [{ url: post.mainImage.url, width: 1200, height: 630 }]
+        : [];
+
+    return {
+        title: post.title,
+        description: post.description ? post.description.slice(0, 100) + "..." : post.title,
+        openGraph: {
+            title: post.title,
+            description: post.description?.slice(0, 100),
+            type: "article",
+            images: images,
+        },
+    };
+}
 
 export async function generateStaticParams() {
     const contents = await getAllEvents();

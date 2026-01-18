@@ -7,7 +7,6 @@ import Navigation from "@/components/Navigation";
 import SmoothScroll from "@/components/SmoothScroll";
 import HeaderLogo from "@/components/HeaderLogo";
 import Footer from "@/components/Footer";
-// 追加インポート
 import { GlobalProvider } from "@/context/GlobalContext";
 import AppBackground from "@/components/AppBackground";
 
@@ -19,8 +18,35 @@ const notojp = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "Project V-CLos",
-  description: "Virtual / Visual / Vocal",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://v-clos.com"),
+
+  title: {
+    template: "%s | V-CLos",
+    default: "V-CLos | Virtual-Connect Live of synthesis",
+  },
+  description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLos（ブイクロス）の公式サイトです。生演奏とモーションキャプチャを融合させた次世代のライブエンターテインメントを創造します。",
+  openGraph: {
+    title: "V-CLos Official Website",
+    description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLosの公式サイト。",
+    url: "https://v-clos.com",
+    siteName: "V-CLos",
+    locale: "ja_JP",
+    type: "website",
+    images: [
+      {
+        url: "/ogp-default.png",
+        width: 1200,
+        height: 630,
+        alt: "V-CLos Official Website",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "V-CLos Official Website",
+    description: "洗足学園音楽大学 V-CLos 公式サイト",
+  },
 };
 
 export default function RootLayout({

@@ -1,14 +1,37 @@
 import { getNewsDetail, getAllNews } from "@/libs/microcms";
+import { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 import parse from "html-react-parser";
 
 type Props = {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ dk?: string }>; // クエリパラメータ(dk)を受け取る
+    searchParams: Promise<{ dk?: string }>;
 };
 
-// 静的パス生成 (公開済みの記事だけHTML化しておく)
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+    const { id } = await params;
+    const { dk } = await searchParams;
+
+    const post = await getNewsDetail(id, dk).catch(() => null);
+
+    if (!post) {
+        return {
+            title: "News Not Found",
+        };
+    }
+
+    return {
+        title: post.title,
+        description: post.summary || post.title,
+        openGraph: {
+            title: post.title,
+            description: post.summary || post.title,
+            type: "article",
+        },
+    };
+}
+
 export async function generateStaticParams() {
     const contents = await getAllNews();
     return contents.map((post) => ({
@@ -18,21 +41,17 @@ export async function generateStaticParams() {
 
 export default async function NewsDetailPage({ params, searchParams }: Props) {
     const { id } = await params;
-    const { dk } = await searchParams; // URLからdraftKey(dk)を取得
-    const { isEnabled } = await draftMode(); // プレビューモードかどうか
+    const { dk } = await searchParams;
+    const { isEnabled } = await draftMode();
 
-    // データを取得
-    // プレビューモードなら draftKey を渡す。通常なら undefined
     const post = await getNewsDetail(id, isEnabled ? dk : undefined).catch(() => null);
 
-    // 記事が見つからなければ404
     if (!post) {
         notFound();
     }
 
     return (
         <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6 font-sans">
-            {/* プレビュー中であることを表示するバー */}
             {isEnabled && (
                 <div className="fixed top-0 left-0 w-full bg-yellow-500 text-black text-center py-2 z-[1000] font-bold font-jura tracking-widest">
                     PREVIEW MODE
