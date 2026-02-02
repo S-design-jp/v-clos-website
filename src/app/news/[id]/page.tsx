@@ -76,9 +76,6 @@ export default async function NewsDetailPage({ params, searchParams }: Props) {
                 <div className="prose prose-invert prose-lg max-w-none font-noto">
                     {parse(post.body)}
                 </div>
-                <div className="prose prose-invert prose-sm md:prose-lg max-w-none font-noto">
-                    {parse(post.body)}
-                </div>
             </article>
         </main>
     );
