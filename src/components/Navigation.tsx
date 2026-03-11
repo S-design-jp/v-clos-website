@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-//import TextScramble from "./TextScramble";
+import { useLocale } from "next-intl";
+import { useRouter, usePathname } from "next/navigation";
+import { useGlobalState } from "@/context/GlobalContext";
 
 const MENU_ITEMS = [
     { label: "TOP", href: "/" },
@@ -14,17 +16,39 @@ const MENU_ITEMS = [
 export default function Navigation() {
     const [isOpen, setIsOpen] = useState(false);
 
+    const locale = useLocale();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const { qualityMode } = useGlobalState();
+
     const toggleMenu = () => setIsOpen(!isOpen);
 
-    // 画質設定をリセットする関数
     const resetQuality = () => {
         localStorage.removeItem("v-clos-quality");
         window.location.reload();
     };
 
+    const switchLanguage = (newLocale: string) => {
+        if (locale === newLocale) return;
+
+        document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`;
+
+        let newPath = pathname;
+        if (newLocale === 'en') {
+            newPath = `/en${pathname === '/' ? '' : pathname}`;
+        } else {
+            newPath = pathname.replace(/^\/en/, '') || '/';
+        }
+
+        router.push(newPath);
+        router.refresh();
+    };
+
+    if (!qualityMode) return null;
+
     return (
         <>
-            {/* ハンバーガーボタン */}
             <button
                 onClick={toggleMenu}
                 className="fixed top-8 right-8 z-[100] w-12 h-12 flex flex-col items-center justify-center gap-1.5 group mix-blend-difference"
@@ -34,7 +58,6 @@ export default function Navigation() {
                 <div className={`w-8 h-[2px] bg-white transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-2" : "group-hover:translate-y-1"}`} />
             </button>
 
-            {/* メニューコンテナ */}
             <div className={`fixed inset-0 z-[90] pointer-events-none overflow-hidden`}>
 
                 <div
@@ -42,25 +65,22 @@ export default function Navigation() {
                     onClick={() => setIsOpen(false)}
                 />
 
-                {/* 紫の装飾破片 */}
                 <div
-                    className={`absolute top-0 right-0 h-full w-full md:w-[60%] bg-gradient-to-b from-purple-900/40 to-black/40 backdrop-blur-sm transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? "translate-x-0" : "translate-x-[100%]"
+                    className={`absolute top-0 right-0 h-full w-full md:w-[60%] bg-gradient-to-b from-[#4cd8ed]/50 via-[#4cd8ed]/20 to-black/60 backdrop-blur-sm transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? "translate-x-0" : "translate-x-[100%]"
                         }`}
                     style={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)" }}
                 />
 
-                {/* メインのメニュー破片 */}
                 <div
-                    className={`absolute top-0 right-0 h-full w-[90%] md:w-[55%] bg-black/60 backdrop-blur-xl border-l border-white/10 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-[100%] pointer-events-none"
+                    className={`absolute top-0 right-0 h-full w-[90%] md:w-[55%] bg-black/60 backdrop-blur-xl border-l border-[#4cd8ed]/40 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-[100%] pointer-events-none"
                         }`}
                     style={{ clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
                 >
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
-                    <div className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-b from-transparent via-cyan-400 to-transparent opacity-50" />
+                    <div className="absolute top-0 left-0 w-[1px] h-full bg-gradient-to-b from-transparent via-[#4cd8ed] to-transparent opacity-80 shadow-[0_0_15px_rgba(76,216,237,0.5)]" />
 
                     <div className="relative h-full flex flex-col justify-center pl-[20%] md:pl-[15%] pr-10 gap-8">
 
-                        {/* メニュー項目 */}
                         {MENU_ITEMS.map((item, index) => (
                             <a
                                 key={index}
@@ -73,32 +93,41 @@ export default function Navigation() {
                                 <span className="relative z-10 block group-hover:translate-x-4 transition-transform duration-300">
                                     {item.label}
                                 </span>
-                                <div className="absolute -bottom-2 left-0 w-0 h-[2px] bg-cyan-400 group-hover:w-full transition-all duration-300" />
+                                <div className="absolute -bottom-2 left-0 w-0 h-[2px] bg-[#4cd8ed] group-hover:w-full transition-all duration-300 shadow-[0_0_10px_rgba(76,216,237,0.8)]" />
                             </a>
                         ))}
 
-                        {/* 設定エリア (画質リセットと言語) */}
                         <div
                             className={`mt-12 pt-8 border-t border-white/10 flex flex-col gap-6 transition-all duration-500 delay-700 ${isOpen ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
                                 }`}
                         >
-                            {/* 画質リセットボタン */}
                             <div className="space-y-2">
                                 <p className="text-[10px] font-jura text-gray-500 tracking-widest">SYSTEM SETTINGS</p>
                                 <button
                                     onClick={resetQuality}
-                                    className="text-xs font-jura tracking-[0.2em] text-cyan-400 hover:text-white transition-colors flex items-center gap-2 group"
+                                    className="text-xs font-jura tracking-[0.2em] text-[#4cd8ed] hover:text-white transition-colors flex items-center gap-2 group"
                                 >
-                                    <span className="w-2 h-2 bg-cyan-400 rounded-full group-hover:animate-pulse" />
+                                    <span className="w-2 h-2 bg-[#4cd8ed] rounded-full group-hover:animate-pulse shadow-[0_0_8px_rgba(76,216,237,0.8)]" />
                                     RESET GRAPHIC QUALITY
                                 </button>
                             </div>
 
-                            {/* 言語切り替え */}
                             <div className="flex items-center gap-6">
-                                <button className="text-sm font-jura tracking-widest text-white border-b border-cyan-400 pb-1">JP</button>
+                                <button
+                                    onClick={() => switchLanguage('ja')}
+                                    className={`text-sm font-jura tracking-widest transition-colors pb-1 ${locale === 'ja' ? 'text-white border-b border-[#4cd8ed] shadow-[#4cd8ed]' : 'text-gray-500 hover:text-white border-b border-transparent'
+                                        }`}
+                                >
+                                    JP
+                                </button>
                                 <span className="text-gray-600">/</span>
-                                <button className="text-sm font-jura tracking-widest text-gray-500 hover:text-white transition-colors pb-1">EN</button>
+                                <button
+                                    onClick={() => switchLanguage('en')}
+                                    className={`text-sm font-jura tracking-widest transition-colors pb-1 ${locale === 'en' ? 'text-white border-b border-[#4cd8ed] shadow-[#4cd8ed]' : 'text-gray-500 hover:text-white border-b border-transparent'
+                                        }`}
+                                >
+                                    EN
+                                </button>
                             </div>
                         </div>
 
@@ -113,6 +142,7 @@ export default function Navigation() {
         }
         .stroke-text:hover {
           -webkit-text-stroke: 0px transparent;
+          text-shadow: 0 0 20px rgba(76, 216, 237, 0.5);
         }
       `}</style>
         </>

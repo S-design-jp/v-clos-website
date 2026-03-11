@@ -10,8 +10,6 @@ const config: Config = {
         extend: {
             fontFamily: {
                 jura: ["futura-pt", "sans-serif"],
-                // 日本語用フォントを追加
-                // 欧文はJura、和文はNoto Sans JPが優先されるように並べると綺麗です
                 noto: ["futura-pt", "var(--font-noto)", "sans-serif"],
             },
             backgroundImage: {
@@ -21,6 +19,8 @@ const config: Config = {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 };
 export default config;

@@ -1,14 +1,15 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+export default withNextIntl({
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.microcms-assets.io', // MicroCMSの画像ドメイン
+        hostname: 'images.microcms-assets.io',
         port: '',
       },
     ],
   },
-};
-
-module.exports = nextConfig;
+});

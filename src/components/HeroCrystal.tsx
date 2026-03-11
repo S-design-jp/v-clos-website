@@ -62,55 +62,30 @@ export default function HeroCrystal({ mode }: Props) {
         }
     });
 
-    const color = new THREE.Color('#000000');
+    // ★修正1: カラーオブジェクトをメモ化してメモリリークを防ぐ
+    const bgColor = useMemo(() => new THREE.Color('#000000'), []);
 
-    // === コア用 (屈折あり) ===
-    // High / Mid で解像度を変える
     const transmissionConfig = mode === "high"
         ? { res: 512, samples: 6 }
         : { res: 256, samples: 4 };
 
-    const transmissionMaterial = (
-        <MeshTransmissionMaterial
-            thickness={0.5} roughness={0} transmission={1} ior={1.5}
-            chromaticAberration={1} anisotropy={0.5} distortion={0.5}
-            distortionScale={0.5} temporalDistortion={0.1} background={color}
-            resolution={transmissionConfig.res} samples={transmissionConfig.samples}
-        />
-    );
-
-    // === ★修正: 破片 & Low用 (無色透明なガラス風) ===
-    // Physicalを使わず、Standardで「黒ベース・高透明・高反射」にすることで
-    // 「計算は軽いけど、見た目はクリアなガラス」を再現します。
-    const glassMaterial = (
-        <meshStandardMaterial
-            color="#111111"       // ベースをほぼ黒にする (白く濁るのを防ぐ)
-            roughness={0}         // ツルツル
-            metalness={0.9}       // 金属光沢を上げて反射を強調
-            transparent={true}    // 透明有効
-            opacity={0.3}         // かなり薄くする
-        />
-    );
-
-    // マテリアル割り当て
-    let coreMaterial;
-    if (mode === "low") {
-        coreMaterial = glassMaterial; // Lowはコアも軽量ガラス
-    } else {
-        coreMaterial = transmissionMaterial; // High/Midはコア屈折
-    }
-
-    // 周りの破片は全モード共通で軽量ガラス
-    const shardMaterial = glassMaterial;
-
     return (
         <>
-            {/* コア: 正十二面体 */}
             <mesh ref={coreRef}>
                 <dodecahedronGeometry args={[1.2, 0]} />
-                {coreMaterial}
 
-                {/* Lowモードの時だけ、存在感を出すために芯を入れる */}
+                {/* ★修正2: 変数に入れず、JSX内に直接マテリアルを記述してライフサイクルを正常化 */}
+                {mode === "low" ? (
+                    <meshStandardMaterial color="#111111" roughness={0} metalness={0.9} transparent opacity={0.3} />
+                ) : (
+                    <MeshTransmissionMaterial
+                        thickness={0.5} roughness={0} transmission={1} ior={1.5}
+                        chromaticAberration={1} anisotropy={0.5} distortion={0.5}
+                        distortionScale={0.5} temporalDistortion={0.1} background={bgColor}
+                        resolution={transmissionConfig.res} samples={transmissionConfig.samples}
+                    />
+                )}
+
                 {mode === "low" && (
                     <mesh>
                         <dodecahedronGeometry args={[1.15, 0]} />
@@ -119,13 +94,12 @@ export default function HeroCrystal({ mode }: Props) {
                 )}
             </mesh>
 
-            {/* 破片群: 四面体 */}
             <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5} floatingRange={[-0.1, 0.1]}>
                 <group ref={shardsGroupRef}>
                     {shards.map((shard, i) => (
                         <mesh key={i} position={shard.position} rotation={shard.rotation} scale={shard.scale}>
                             <tetrahedronGeometry args={[1, 0]} />
-                            {shardMaterial}
+                            <meshStandardMaterial color="#111111" roughness={0} metalness={0.9} transparent opacity={0.3} />
                         </mesh>
                     ))}
                 </group>

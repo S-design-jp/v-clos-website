@@ -6,12 +6,12 @@ import Image from "next/image";
 import parse from "html-react-parser";
 
 type Props = {
-    params: Promise<{ id: string }>;
+    params: Promise<{ locale: string; id: string }>;
     searchParams: Promise<{ dk?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-    const { id } = await params;
+    const { locale, id } = await params;
     const { dk } = await searchParams;
 
     const post = await getEventDetail(id, dk).catch(() => null);
@@ -19,16 +19,20 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     if (!post) {
         return { title: "Event Not Found" };
     }
+
+    const displayTitle = locale === "en" && post.title_en ? post.title_en : post.title;
+    const displayDescription = locale === "en" && post.description_en ? post.description_en : post.description;
+
     const images = post.mainImage
         ? [{ url: post.mainImage.url, width: 1200, height: 630 }]
         : [];
 
     return {
-        title: post.title,
-        description: post.description ? post.description.slice(0, 100) + "..." : post.title,
+        title: displayTitle,
+        description: displayDescription ? displayDescription.slice(0, 100) + "..." : displayTitle,
         openGraph: {
-            title: post.title,
-            description: post.description?.slice(0, 100),
+            title: displayTitle,
+            description: displayDescription?.slice(0, 100),
             type: "article",
             images: images,
         },
@@ -36,14 +40,19 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 }
 
 export async function generateStaticParams() {
-    const contents = await getAllEvents();
-    return contents.map((post) => ({
-        id: post.id,
-    }));
+    const contents = await getAllEvents().catch(() => []);
+
+    const params: { locale: string; id: string }[] = [];
+    contents.forEach((post) => {
+        params.push({ locale: "ja", id: post.id });
+        params.push({ locale: "en", id: post.id });
+    });
+
+    return params;
 }
 
 export default async function EventDetailPage({ params, searchParams }: Props) {
-    const { id } = await params;
+    const { locale, id } = await params;
     const { dk } = await searchParams;
     const { isEnabled } = await draftMode();
 
@@ -52,6 +61,10 @@ export default async function EventDetailPage({ params, searchParams }: Props) {
     if (!post) {
         notFound();
     }
+
+    const displayTitle = locale === "en" && post.title_en ? post.title_en : post.title;
+    const displayVenue = locale === "en" && post.venue_en ? post.venue_en : post.venue;
+    const displayDescription = locale === "en" && post.description_en ? post.description_en : post.description;
 
     return (
         <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6 font-sans">
@@ -63,7 +76,6 @@ export default async function EventDetailPage({ params, searchParams }: Props) {
             )}
 
             <article className="max-w-5xl mx-auto">
-                {/* メイン画像があれば表示 */}
                 {post.mainImage && (
                     <div className="relative w-full aspect-video mb-12 rounded-sm overflow-hidden border border-white/10">
                         <Image
@@ -82,19 +94,19 @@ export default async function EventDetailPage({ params, searchParams }: Props) {
                     </div>
 
                     <h1 className="text-3xl md:text-6xl font-bold leading-tight font-noto mb-6">
-                        {post.title}
+                        {displayTitle}
                     </h1>
 
-                    {post.venue && (
+                    {displayVenue && (
                         <p className="text-gray-400 font-noto">
-                            Venue: <span className="text-white">{post.venue}</span>
+                            Venue: <span className="text-white">{displayVenue}</span>
                         </p>
                     )}
                 </div>
 
-                {post.description && (
+                {displayDescription && (
                     <div className="prose prose-invert prose-sm md:prose-lg max-w-none font-noto whitespace-pre-wrap">
-                        {parse(post.description)}
+                        {parse(displayDescription)}
                     </div>
                 )}
             </article>

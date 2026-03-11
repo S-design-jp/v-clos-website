@@ -5,12 +5,12 @@ import { notFound } from "next/navigation";
 import parse from "html-react-parser";
 
 type Props = {
-    params: Promise<{ id: string }>;
+    params: Promise<{ locale: string; id: string }>;
     searchParams: Promise<{ dk?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-    const { id } = await params;
+    const { locale, id } = await params;
     const { dk } = await searchParams;
 
     const post = await getNewsDetail(id, dk).catch(() => null);
@@ -21,26 +21,35 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         };
     }
 
+    const displayTitle = locale === "en" && post.title_en ? post.title_en : post.title;
+    const displaySummary = locale === "en" && post.summary_en ? post.summary_en : post.summary;
+
     return {
-        title: post.title,
-        description: post.summary || post.title,
+        title: displayTitle,
+        description: displaySummary || displayTitle,
         openGraph: {
-            title: post.title,
-            description: post.summary || post.title,
+            title: displayTitle,
+            description: displaySummary || displayTitle,
             type: "article",
         },
     };
 }
 
 export async function generateStaticParams() {
-    const contents = await getAllNews();
-    return contents.map((post) => ({
-        id: post.id,
-    }));
+    const contents = await getAllNews().catch(() => []);
+
+    const params: { locale: string; id: string }[] = [];
+
+    contents.forEach((post) => {
+        params.push({ locale: "ja", id: post.id });
+        params.push({ locale: "en", id: post.id });
+    });
+
+    return params;
 }
 
 export default async function NewsDetailPage({ params, searchParams }: Props) {
-    const { id } = await params;
+    const { locale, id } = await params;
     const { dk } = await searchParams;
     const { isEnabled } = await draftMode();
 
@@ -49,6 +58,9 @@ export default async function NewsDetailPage({ params, searchParams }: Props) {
     if (!post) {
         notFound();
     }
+
+    const displayTitle = locale === "en" && post.title_en ? post.title_en : post.title;
+    const displayBody = locale === "en" && post.body_en ? post.body_en : post.body;
 
     return (
         <main className="min-h-screen bg-black text-white pt-32 pb-20 px-6 font-sans">
@@ -69,12 +81,12 @@ export default async function NewsDetailPage({ params, searchParams }: Props) {
                     </div>
 
                     <h1 className="text-xl md:text-5xl font-bold leading-tight font-noto">
-                        {post.title}
+                        {displayTitle}
                     </h1>
                 </div>
 
                 <div className="prose prose-invert prose-lg max-w-none font-noto">
-                    {parse(post.body)}
+                    {parse(displayBody)}
                 </div>
             </article>
         </main>

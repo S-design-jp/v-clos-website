@@ -3,12 +3,15 @@
 import Tilt from "react-parallax-tilt";
 import Link from "next/link";
 import type { Event } from "@/libs/microcms";
+import { useLocale } from "next-intl"; // ★ 追加: 現在の言語を取得
 
 interface Props {
     events?: Event[];
 }
 
 export default function LiveSection({ events = [] }: Props) {
+    // ★ 追加: 現在の言語（"ja" または "en"）を取得
+    const locale = useLocale();
 
     const formatDate = (dateString: string) => {
         if (!dateString) return "TBA";
@@ -40,82 +43,92 @@ export default function LiveSection({ events = [] }: Props) {
 
             {/* イベントリスト */}
             <div className="space-y-12">
-                {displayEvents.map((item) => (
-                    <Tilt
-                        key={item.id}
-                        tiltMaxAngleX={3}
-                        tiltMaxAngleY={3}
-                        perspective={1000}
-                        scale={1.01}
-                        transitionSpeed={1000}
-                        className="w-full"
-                    >
-                        <Link
-                            href={`/events/${item.id}`}
-                            className="group relative block w-full overflow-hidden rounded-sm border border-white/10 bg-black/40 backdrop-blur-md transition-all duration-500 hover:border-cyan-400/50"
+                {displayEvents.map((item) => {
+                    // ★ 修正: 言語に応じて表示するテキストを出し分け
+                    const displayTitle = locale === "en" && item.title_en ? item.title_en : item.title;
+                    const displayVenue = locale === "en" && item.venue_en ? item.venue_en : item.venue;
+
+                    return (
+                        <Tilt
+                            key={item.id}
+                            tiltMaxAngleX={3}
+                            tiltMaxAngleY={3}
+                            perspective={1000}
+                            scale={1.01}
+                            transitionSpeed={1000}
+                            className="w-full"
                         >
+                            {/* ★ 修正: リンク先に locale を含める */}
+                            <Link
+                                href={`/${locale}/events/${item.id}`}
+                                className="group relative block w-full overflow-hidden rounded-sm border border-white/10 bg-black/40 backdrop-blur-md transition-all duration-500 hover:border-cyan-400/50"
+                            >
 
-                            {(item.thumbnail?.url || item.mainImage?.url) && (
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
-                                    style={{ backgroundImage: `url(${item.thumbnail?.url || item.mainImage?.url})` }}
-                                />
-                            )}
+                                {(item.thumbnail?.url || item.mainImage?.url) && (
+                                    <div
+                                        className="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
+                                        style={{ backgroundImage: `url(${item.thumbnail?.url || item.mainImage?.url})` }}
+                                    />
+                                )}
 
-                            {!(item.thumbnail?.url || item.mainImage?.url) && (
-                                <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 opacity-30" />
-                            )}
+                                {!(item.thumbnail?.url || item.mainImage?.url) && (
+                                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 opacity-30" />
+                                )}
 
-                            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-20 mix-blend-overlay" />
+                                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-20 mix-blend-overlay" />
 
-                            <div className="relative p-8 md:p-12 flex flex-col md:flex-row gap-8 md:items-center justify-between z-10">
+                                <div className="relative p-8 md:p-12 flex flex-col md:flex-row gap-8 md:items-center justify-between z-10">
 
-                                <div className="flex flex-col gap-3 min-w-[160px]">
-                                    <span className="font-jura text-2xl md:text-3xl text-white tracking-widest drop-shadow-lg">
-                                        {formatDate(item.date)}
-                                    </span>
-                                    {item.status && (
-                                        <span className={`inline-block px-3 py-1 text-[10px] font-noto tracking-wider border w-fit transition-colors ${item.status.includes("終了") || item.status === "THANK YOU"
-                                            ? "border-gray-500 text-gray-500"
-                                            : "border-cyan-400 text-cyan-400 animate-pulse bg-cyan-900/20"
-                                            }`}>
-                                            {item.status}
+                                    <div className="flex flex-col gap-3 min-w-[160px]">
+                                        <span className="font-jura text-2xl md:text-3xl text-white tracking-widest drop-shadow-lg">
+                                            {formatDate(item.date)}
                                         </span>
-                                    )}
-                                </div>
+                                        {item.status && (
+                                            <span className={`inline-block px-3 py-1 text-[10px] font-noto tracking-wider border w-fit transition-colors ${item.status.includes("終了") || item.status === "THANK YOU"
+                                                ? "border-gray-500 text-gray-500"
+                                                : "border-cyan-400 text-cyan-400 animate-pulse bg-cyan-900/20"
+                                                }`}>
+                                                {item.status}
+                                            </span>
+                                        )}
+                                    </div>
 
-                                <div className="flex-grow border-l border-white/30 md:pl-8 pl-4 ml-2 md:ml-0">
-                                    {item.series && (
-                                        <span className="block text-xs font-jura text-cyan-300 mb-1 tracking-wider">
-                                            {item.series}
-                                        </span>
-                                    )}
-                                    <h3 className="font-noto text-lg md:text-2xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors drop-shadow-md">
-                                        {item.title}
-                                    </h3>
-                                    {item.venue && (
-                                        <p className="font-noto text-sm text-gray-300 flex items-center gap-2">
-                                            <span className="w-1 h-1 bg-cyan-400 rounded-full" />
-                                            {item.venue}
-                                        </p>
-                                    )}
-                                </div>
+                                    <div className="flex-grow border-l border-white/30 md:pl-8 pl-4 ml-2 md:ml-0">
+                                        {item.series && (
+                                            <span className="block text-xs font-jura text-cyan-300 mb-1 tracking-wider">
+                                                {item.series}
+                                            </span>
+                                        )}
+                                        {/* ★ 修正: displayTitle を出力 */}
+                                        <h3 className="font-noto text-lg md:text-2xl font-bold text-white mb-3 group-hover:text-cyan-400 transition-colors drop-shadow-md">
+                                            {displayTitle}
+                                        </h3>
+                                        {/* ★ 修正: displayVenue を出力 */}
+                                        {displayVenue && (
+                                            <p className="font-noto text-sm text-gray-300 flex items-center gap-2">
+                                                <span className="w-1 h-1 bg-cyan-400 rounded-full" />
+                                                {displayVenue}
+                                            </p>
+                                        )}
+                                    </div>
 
-                                <div className="hidden md:flex items-center justify-center w-16 h-16 rounded-full border border-white/20 bg-black/20 group-hover:bg-cyan-400 group-hover:border-cyan-400 transition-all duration-300">
-                                    <svg className="w-6 h-6 text-white transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                    </svg>
-                                </div>
+                                    <div className="hidden md:flex items-center justify-center w-16 h-16 rounded-full border border-white/20 bg-black/20 group-hover:bg-cyan-400 group-hover:border-cyan-400 transition-all duration-300">
+                                        <svg className="w-6 h-6 text-white transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                        </svg>
+                                    </div>
 
-                            </div>
-                        </Link>
-                    </Tilt>
-                ))}
+                                </div>
+                            </Link>
+                        </Tilt>
+                    );
+                })}
             </div>
 
             {/* 一覧ページへのリンクボタン */}
             <div className="mt-16 flex justify-end">
-                <Link href="/events" className="group relative inline-block px-10 py-4 border border-white/20 overflow-hidden font-jura text-sm tracking-[0.2em] transition-all hover:border-cyan-400/50 hover:pr-16">
+                {/* ★ 修正: 一覧ページへのリンクにも locale を含める */}
+                <Link href={`/${locale}/events`} className="group relative inline-block px-10 py-4 border border-white/20 overflow-hidden font-jura text-sm tracking-[0.2em] transition-all hover:border-cyan-400/50 hover:pr-16">
                     <span className="relative z-10 group-hover:text-black transition-colors">VIEW ALL SCHEDULE</span>
                     <div className="absolute inset-0 bg-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-right duration-300" />
                     <span className="absolute right-5 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 z-20 text-black transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">

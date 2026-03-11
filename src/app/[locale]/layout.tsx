@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Noto_Sans_JP } from "next/font/google";
 import Script from "next/script";
 import { Suspense } from "react";
-import "./globals.css";
+import "@/app/globals.css";
 import Navigation from "@/components/Navigation";
 import SmoothScroll from "@/components/SmoothScroll";
 import HeaderLogo from "@/components/HeaderLogo";
@@ -10,6 +10,9 @@ import Footer from "@/components/Footer";
 import { GlobalProvider } from "@/context/GlobalContext";
 import AppBackground from "@/components/AppBackground";
 import { GoogleAnalytics } from '@next/third-parties/google';
+
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 
 const inter = Inter({ subsets: ["latin"] });
 const notojp = Noto_Sans_JP({
@@ -20,12 +23,11 @@ const notojp = Noto_Sans_JP({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://v-clos.jp"),
-
   title: {
     template: "%s | V-CLos",
     default: "V-CLos | Virtual-Connect Live of synthesis",
   },
-  description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLos（ブイクロス）の公式サイトです。生演奏とモーションキャプチャを融合させた次世代のライブエンターテインメントを創造します。",
+  description: "洗足学園音楽大学 3DCGライブ制作団体 V-CLos（ブイクロス）の公式サイトです。",
   verification: {
     google: "JvC-MoaOKYvPls4XTWFBu0-uvoO4f2zcMmovQY82jPM",
   },
@@ -45,7 +47,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
     title: "V-CLos Official Website",
@@ -53,15 +54,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+// 【修正箇所】locale プロパティに「?（Optional修飾子）」を付与し、空のオブジェクトも許容する設計に変更
+type Props = {
   children: React.ReactNode;
-}>) {
+  params: Promise<{ locale?: string }>;
+};
+
+export default async function LocaleLayout({
+  children,
+  params
+}: Props) {
+  // 【修正箇所】非同期処理を待機後、localeがundefinedの場合はデフォルト値（フォールバック）として 'ja' を代入
+  const resolvedParams = await params;
+  const locale = resolvedParams?.locale || 'ja';
+
+  const messages = await getMessages();
+
   return (
-    <html lang="ja">
+    <html lang={locale}>
       <head>
-        {/* Adobe Fonts Script */}
         <Script id="adobe-fonts" strategy="afterInteractive">
           {`
             (function(d) {
@@ -72,19 +83,20 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${inter.className} ${notojp.variable} bg-black`}>
-        <GlobalProvider>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <GlobalProvider>
+            <Suspense fallback={null}>
+              <SmoothScroll />
+            </Suspense>
 
+            <AppBackground />
+            <HeaderLogo />
+            <Navigation />
+            {children}
+            <Footer />
+          </GlobalProvider>
+        </NextIntlClientProvider>
 
-          <Suspense fallback={null}>
-            <SmoothScroll />
-          </Suspense>
-
-          <AppBackground />
-          <HeaderLogo />
-          <Navigation />
-          {children}
-          <Footer />
-        </GlobalProvider>
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>

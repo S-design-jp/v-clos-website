@@ -3,12 +3,16 @@
 import Tilt from "react-parallax-tilt";
 import Link from "next/link";
 import type { News } from "@/libs/microcms";
+import { useLocale } from "next-intl"; // ★ 追加: 現在の言語を取得するフック
 
 interface Props {
     news: News[];
 }
 
 export default function NewsSection({ news }: Props) {
+    // ★ 追加: 現在の言語（"ja" または "en"）を取得
+    const locale = useLocale();
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
@@ -27,37 +31,47 @@ export default function NewsSection({ news }: Props) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {displayNews.map((item) => (
-                    <Tilt key={item.id} tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.02} transitionSpeed={1000} className="h-full">
-                        <Link href={`/news/${item.id}`} className="group relative block h-full p-8 rounded-sm border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-cyan-400/50 cursor-none flex flex-col justify-between">
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                {displayNews.map((item) => {
+                    // ★ 修正: 言語に応じて表示するテキストを出し分け
+                    const displayTitle = locale === "en" && item.title_en ? item.title_en : item.title;
+                    const displaySummary = locale === "en" && item.summary_en ? item.summary_en : item.summary;
 
-                            <div>
-                                <div className="flex items-center justify-between mb-6 font-jura text-xs text-gray-400">
-                                    <span className="tracking-widest">{formatDate(item.publishedAt)}</span>
-                                    <span className="px-2 py-0.5 border border-white/20 text-[10px] group-hover:border-cyan-400 group-hover:text-cyan-400 transition-colors">
-                                        INFO
-                                    </span>
+                    return (
+                        <Tilt key={item.id} tiltMaxAngleX={10} tiltMaxAngleY={10} perspective={1000} scale={1.02} transitionSpeed={1000} className="h-full">
+                            {/* ★ 修正: リンク先に locale を含めることで、英語ページのまま遷移させる */}
+                            <Link href={`/${locale}/news/${item.id}`} className="group relative block h-full p-8 rounded-sm border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-cyan-400/50 cursor-none flex flex-col justify-between">
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                                <div>
+                                    <div className="flex items-center justify-between mb-6 font-jura text-xs text-gray-400">
+                                        <span className="tracking-widest">{formatDate(item.publishedAt)}</span>
+                                        <span className="px-2 py-0.5 border border-white/20 text-[10px] group-hover:border-cyan-400 group-hover:text-cyan-400 transition-colors">
+                                            INFO
+                                        </span>
+                                    </div>
+
+                                    {/* ★ 修正: displayTitle を出力 */}
+                                    <h3 className="font-noto text-base md:text-xl font-bold group-hover:text-cyan-400 transition-colors line-clamp-2">
+                                        {displayTitle}
+                                    </h3>
+
+                                    {/* ★ 修正: displaySummary を出力 */}
+                                    <p className="text-xs text-gray-400 leading-loose font-noto line-clamp-3">
+                                        {displaySummary}
+                                    </p>
                                 </div>
 
-                                <h3 className="font-noto text-base md:text-xl font-bold group-hover:text-cyan-400 transition-colors line-clamp-2">
-                                    {item.title}
-                                </h3>
-
-                                <p className="text-xs text-gray-400 leading-loose font-noto line-clamp-3">
-                                    {item.summary}
-                                </p>
-                            </div>
-
-                            <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/20 group-hover:border-cyan-400 transition-colors" />
-                            <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-white/20 group-hover:border-cyan-400 transition-colors" />
-                        </Link>
-                    </Tilt>
-                ))}
+                                <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/20 group-hover:border-cyan-400 transition-colors" />
+                                <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-white/20 group-hover:border-cyan-400 transition-colors" />
+                            </Link>
+                        </Tilt>
+                    );
+                })}
             </div>
 
             <div className="mt-16 flex justify-center">
-                <Link href="/news" className="group relative inline-block px-12 py-4 border border-white/20 overflow-hidden font-jura text-sm tracking-[0.2em] transition-all hover:border-cyan-400/50">
+                {/* ★ 修正: VIEW ALL ボタンも locale を含めたパスに変更 */}
+                <Link href={`/${locale}/news`} className="group relative inline-block px-12 py-4 border border-white/20 overflow-hidden font-jura text-sm tracking-[0.2em] transition-all hover:border-cyan-400/50">
                     <span className="relative z-10 group-hover:text-black transition-colors">VIEW ALL</span>
                     <div className="absolute inset-0 bg-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                 </Link>

@@ -1,0 +1,84 @@
+{
+    "Hero": {
+        "subtitle": "Virtual - Connect Live of synthesis"
+    },
+    "About": {
+        "items": {
+            "01": {
+                "tab": "WHO WE ARE",
+                "title": "V-CLos Project",
+                "desc": "V-CLos is a 3DCG live production collective spearheaded by students of Senzoku Gakuen College of Music, dedicated to pursuing the next generation of entertainment."
+            },
+            "02": {
+                "tab": "STRENGTH",
+                "title": "REAL × VIRTUAL",
+                "desc": "Our paramount strength lies in the synergy between the 'power of live performance,' inherent to a college of music, and the 'practical application of 3DCG technology' leveraging on-campus motion capture facilities."
+            },
+            "03": {
+                "tab": "MISSION",
+                "title": "STUDENT CREATION",
+                "desc": "From conceptualization and musical performance to visual production and dance motion, everything is meticulously crafted by the hands of students. Starting with the 'VOCA-Fes Series,' we broadcast a unique paradigm of fan-made live concerts that only we can actualize."
+            }
+        }
+    },
+    "AboutPage": {
+        "title": "ABOUT US",
+        "whoWeAre": {
+            "title": "WHO WE ARE",
+            "p1": "V-CLos is a 3DCG live production collective driven by the students of Senzoku Gakuen College of Music, exploring the next generation of entertainment.",
+            "p2": "Our goal is to create a one-of-a-kind virtual experience that fuses the <highlight>\"overwhelming passion of live performance\"</highlight> only possible at a music college with <highlight>\"cutting-edge 3DCG technology\"</highlight> utilizing a motion capture system.",
+            "p3": "From planning to performance, sound design, CG motion, and visual direction, everything is created by the students’ own hands, continuing to broadcast innovative expressions that only we can achieve."
+        },
+        "vocaFes": {
+            "tag": "FLAGSHIP PROJECT",
+            "p1": "\"VOCA-Fes Series\" is the flagship live project brought to you by the combined forces of V-CLos.",
+            "p2": "At its core lies our <underline>\"absolute dedication to live performance\"</underline>. In VOCA-Fes, real-time band performances generate an enthusiastic groove.",
+            "p3": "This series is also the <highlight>\"culmination of our research\"</highlight>. Under the theme of \"a different technical challenge for every performance\", we open up new possibilities for fan-made live shows."
+        },
+        "team": {
+            "title": "TEAM STRUCTURE",
+            "roles": {
+                "performance": {
+                    "name": "Performance Team",
+                    "role": "PERFORMANCE",
+                    "desc": "Responsible for band performance, manipulation (control of synchronized sound sources), and lead sheet (score) production."
+                },
+                "sound": {
+                    "name": "Sound Team",
+                    "role": "SOUND DESIGN",
+                    "desc": "Responsible for sequence production (programming) and vocal tuning."
+                },
+                "visual": {
+                    "name": "Visual Team",
+                    "role": "VISUAL / MOTION",
+                    "desc": "Responsible for dance capture of student actors using the on-campus motion capture system, 3D motion production, and background visuals (VJ)."
+                },
+                "pr": {
+                    "name": "PR Team",
+                    "role": "PLANNING / PR",
+                    "desc": "Plans and executes PR strategies to promote our live performances."
+                }
+            },
+            "footer": "In addition to these internal sections of V-CLos, by establishing a cooperative system with student staff (lighting and sound) outside the project, <br></br>we bring together campus resources and balance academic research with on-site technology."
+        },
+        "mission": {
+            "label": "MISSION",
+            "sub": "Mission / Philosophy",
+            "text": "Fully utilizing our strengths as a music college<br></br>to create new experiences."
+        },
+        "vision": {
+            "label": "VISION",
+            "sub": "Vision / Future Outlook",
+            "text": "Exploring unprecedented possibilities<br></br>for 3DCG live performances."
+        },
+        "contact": {
+            "text": "For questions and requests regarding V-CLos activities,<br></br>please contact us via the CONTACT page.",
+            "button": "CONTACT US"
+        }
+    },
+    "ContactPage": {
+        "title": "CONTACT",
+        "desc": "For inquiries and requests regarding V-CLos,<br></br>please use the form below.",
+        "loading": "Loading..."
+    }
+}

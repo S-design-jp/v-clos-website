@@ -1,0 +1,84 @@
+{
+    "Hero": {
+        "subtitle": "Virtual - Connect Live of synthesis"
+    },
+    "About": {
+        "items": {
+            "01": {
+                "tab": "WHO WE ARE",
+                "title": "V-CLos Project",
+                "desc": "V-CLosは、洗足学園音楽大学の学生が主体となり、次世代のエンターテイメントを追求する3DCGライブ制作団体です。"
+            },
+            "02": {
+                "tab": "STRENGTH",
+                "title": "REAL × VIRTUAL",
+                "desc": "私たちの最大の強みは、音楽大学ならではの「生演奏の力」と、学内のモーションキャプチャを駆使した「3DCG技術の実践」の融合です。"
+            },
+            "03": {
+                "tab": "MISSION",
+                "title": "STUDENT CREATION",
+                "desc": "企画、演奏、映像、そしてダンスモーションに至るまで、そのすべてを学生の手で創造する。「VOCA-Fes Series」をはじめ、私たちにしかできないファンメイドライブの形を、ここから発信します。"
+            }
+        }
+    },
+    "AboutPage": {
+        "title": "ABOUT US",
+        "whoWeAre": {
+            "title": "WHO WE ARE",
+            "p1": "V-CLosは、洗足学園音楽大学の学生が主体となり、次世代のエンターテイメントを追求する3DCGライブ制作団体です。",
+            "p2": "私たちが目指すのは、音楽大学だからこそ可能な<highlight>「生演奏の圧倒的な熱量」</highlight>と、モーションキャプチャシステムを駆使した<highlight>「最先端の3DCG技術」</highlight>とを融合させた、唯一無二のバーチャル体験です。",
+            "p3": "企画から演奏、サウンドデザイン、CGモーション、そして映像演出に至るまで。そのすべてを学生の手で創造し、私たちにしかできない革新的な表現を発信し続けます。"
+        },
+        "vocaFes": {
+            "tag": "FLAGSHIP PROJECT",
+            "p1": "「VOCA-Fes Series」は、V-CLosが総力を結集して送るフラッグシップ・ライブプロジェクトです。",
+            "p2": "その核にあるのは<underline>「生演奏への徹底的なこだわり」</underline>です。 VOCA-Fesではリアルタイムのバンド演奏が熱狂のグルーヴを生み出します。",
+            "p3": "また、このシリーズは私たちの<highlight>「研究の結晶」</highlight>でもあります。 「毎公演異なる技術的挑戦」をテーマに掲げ、ファンメイドライブの新たな可能性を切り開きます。"
+        },
+        "team": {
+            "title": "TEAM STRUCTURE",
+            "roles": {
+                "performance": {
+                    "name": "演奏班",
+                    "role": "PERFORMANCE",
+                    "desc": "バンド演奏、マニピュレーター（同期音源の制御）、リードシート（譜面）制作を担当。"
+                },
+                "sound": {
+                    "name": "サウンド班",
+                    "role": "SOUND DESIGN",
+                    "desc": "シーケンス制作（打ち込み）、ボーカルの調声を担当。"
+                },
+                "visual": {
+                    "name": "映像班",
+                    "role": "VISUAL / MOTION",
+                    "desc": "学内モーションキャプチャシステムによる学生アクター自身のダンスキャプチャ、3Dモーション制作、背景映像（VJ）を担当。"
+                },
+                "pr": {
+                    "name": "広報企画班",
+                    "role": "PLANNING / PR",
+                    "desc": "ライブを広めるべく、企画・広報戦略の立案と実行を行います。"
+                }
+            },
+            "footer": "これらV-CLos内部のセクションに加え、プロジェクト外部の学生スタッフ（照明・音響）と協力体制を敷くことで、<br></br>学内リソースを結集し、アカデミックな研究と現場の技術を両立させています。"
+        },
+        "mission": {
+            "label": "MISSION",
+            "sub": "ミッション / 理念",
+            "text": "音大としての強みを存分に活かし、<br></br>新体験を創造する。"
+        },
+        "vision": {
+            "label": "VISION",
+            "sub": "ビジョン / 未来像",
+            "text": "これまでにない新しい<br></br>3DCGライブの可能性を模索する。"
+        },
+        "contact": {
+            "text": "V-CLosの活動に関するご質問・ご依頼は<br></br>CONTACTページよりお問い合わせください。",
+            "button": "CONTACT US"
+        }
+    },
+    "ContactPage": {
+        "title": "CONTACT",
+        "desc": "V-CLosへのご依頼・お問い合わせは<br></br>以下のフォームよりお願いいたします。",
+        "loading": "読み込んでいます…"
+    }
+}
