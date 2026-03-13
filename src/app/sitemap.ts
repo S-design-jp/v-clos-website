@@ -3,8 +3,10 @@ import { getAllNews, getAllEvents } from "@/libs/microcms";
 
 const SITE_URL = "https://v-clos.jp";
 
+const locales = ["", "en"] as const;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const staticRoutes = [
+    const staticPaths = [
         "",
         "/news",
         "/events",
@@ -12,12 +14,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         "/contact",
         "/policy",
         "/credits",
-    ].map((route) => ({
-        url: `${SITE_URL}${route}`,
-        lastModified: new Date(),
-        changeFrequency: "monthly" as const,
-        priority: route === "" ? 1 : 0.8,
-    }));
+    ];
+
+    const staticRoutes = staticPaths.flatMap((path) =>
+        locales.map((locale) => ({
+            url: `${SITE_URL}${locale ? `/${locale}` : ""}${path}`,
+            lastModified: new Date(),
+            changeFrequency: "monthly" as const,
+            priority: path === "" ? 1 : 0.8,
+        }))
+    );
 
     const news = await getAllNews();
     const newsRoutes = news.map((item) => ({

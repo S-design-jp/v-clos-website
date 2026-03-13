@@ -90,6 +90,11 @@ export default async function LocaleLayout({
             </Suspense>
 
             <AppBackground />
+            <div className="fixed top-0 left-0 w-full h-[8vh] bg-black z-[200] pointer-events-none" />
+            <div className="fixed bottom-0 left-0 w-full h-[8vh] bg-black z-[200] pointer-events-none" />
+            <div className="fixed top-[8vh] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent z-[200] pointer-events-none" />
+            <div className="fixed bottom-[8vh] left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent z-[200] pointer-events-none" />
+
             <HeaderLogo />
             <Navigation />
             {children}
@@ -97,7 +102,9 @@ export default async function LocaleLayout({
           </GlobalProvider>
         </NextIntlClientProvider>
 
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </body>
     </html>
   );

@@ -19,7 +19,7 @@ export default function ScrollIndicator() {
 
   return (
     <div
-      className={`absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none transition-opacity duration-700 ease-out z-50 ${isVisible ? "opacity-100" : "opacity-0"
+      className={`absolute bottom-[10vh] left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none transition-opacity duration-700 ease-out z-50 ${isVisible ? "opacity-100" : "opacity-0"
         }`}
     >
       <div className="relative flex items-center justify-center">

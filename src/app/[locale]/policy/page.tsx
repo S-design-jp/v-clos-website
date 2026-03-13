@@ -2,18 +2,18 @@
 
 import Link from "next/link";
 import TextScramble from "@/components/TextScramble";
+import { useLocale } from "next-intl"
 
 export default function PolicyPage() {
+    const locale = useLocale();
     return (
         <main className="relative w-full min-h-screen text-white bg-black font-noto pt-32 pb-20 px-6">
 
-            {/* 背景演出 */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:40px_40px]" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
             </div>
 
-            {/* ヘッダー */}
             <div className="relative z-10 max-w-4xl mx-auto text-center mb-20">
                 <h1 className="text-3xl md:text-5xl font-bold font-jura tracking-widest mb-4">
                     <TextScramble text="SITE POLICY" />
@@ -21,7 +21,6 @@ export default function PolicyPage() {
                 <div className="w-24 h-[1px] bg-cyan-400 mx-auto" />
             </div>
 
-            {/* コンテンツエリア */}
             <div className="relative z-10 max-w-3xl mx-auto space-y-16 text-gray-300 leading-loose">
 
                 <section>
@@ -58,13 +57,15 @@ export default function PolicyPage() {
                     </p>
                 </section>
 
-                {/* お問い合わせへの誘導 */}
                 <section className="text-center pt-10 border-t border-white/10">
                     <p className="mb-8 text-sm text-gray-400">
                         当サイトのポリシーに関するご質問は<br />
                         CONTACTページよりお問い合わせください。
                     </p>
-                    <Link href="/contact" className="group relative inline-block px-12 py-4 border border-white/20 overflow-hidden font-jura text-sm tracking-[0.2em] transition-all hover:border-cyan-400/50">
+                    <Link
+                        href={`/${locale === "en" ? "en/" : ""}contact`}
+                        className="group relative inline-block px-12 py-4 border border-white/20 overflow-hidden font-jura text-sm tracking-[0.2em] transition-all hover:border-cyan-400/50"
+                    >
                         <span className="relative z-10 group-hover:text-black transition-colors">CONTACT</span>
                         <div className="absolute inset-0 bg-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
                     </Link>

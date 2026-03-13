@@ -1,8 +1,19 @@
 import { createClient } from "microcms-js-sdk";
 
+const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = process.env.MICROCMS_API_KEY;
+
+if (typeof window === "undefined" && (!serviceDomain || !apiKey)) {
+    throw new Error(
+        "[microcms.ts] 環境変数が未設定です。\n" +
+        "MICROCMS_SERVICE_DOMAIN と MICROCMS_API_KEY を .env.local または " +
+        "Vercelの環境変数設定に追加してください。"
+    );
+}
+
 export const client = createClient({
-    serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN || "",
-    apiKey: process.env.MICROCMS_API_KEY || "",
+    serviceDomain: serviceDomain ?? "",
+    apiKey: apiKey ?? "",
 });
 
 export type News = {
@@ -14,6 +25,7 @@ export type News = {
     summary_en?: string;
     body: string;
     body_en?: string;
+    thumbnail?: { url: string; height: number; width: number; };
 };
 
 export type Event = {

@@ -2,7 +2,29 @@ import { getNewsDetail, getAllNews } from "@/libs/microcms";
 import { Metadata } from "next";
 import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
-import parse from "html-react-parser";
+import parse, { domToReact, HTMLReactParserOptions, Element } from "html-react-parser";
+import Image from "next/image";
+
+const parserOptions: HTMLReactParserOptions = {
+    replace(domNode) {
+        if (domNode instanceof Element && domNode.name === "img") {
+            const { src, alt, width, height } = domNode.attribs;
+
+            // srcが空の場合はスキップ
+            if (!src) return;
+
+            return (
+                <Image
+                    src={src}
+                    alt={alt || ""}
+                    width={Number(width) || 800}
+                    height={Number(height) || 600}
+                    className="w-full h-auto rounded"
+                />
+            );
+        }
+    },
+};
 
 type Props = {
     params: Promise<{ locale: string; id: string }>;
@@ -23,6 +45,9 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
     const displayTitle = locale === "en" && post.title_en ? post.title_en : post.title;
     const displaySummary = locale === "en" && post.summary_en ? post.summary_en : post.summary;
+    const ogpImage = post.thumbnail?.url
+        ? { url: post.thumbnail.url, width: 1200, height: 630 }
+        : { url: "/ogp-default.png", width: 1200, height: 630 };
 
     return {
         title: displayTitle,
@@ -31,6 +56,14 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
             title: displayTitle,
             description: displaySummary || displayTitle,
             type: "article",
+            locale: "ja_JP",
+            images: [ogpImage],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: displayTitle,
+            description: displaySummary || displayTitle,
+            images: [ogpImage.url],
         },
     };
 }
@@ -86,7 +119,7 @@ export default async function NewsDetailPage({ params, searchParams }: Props) {
                 </div>
 
                 <div className="prose prose-invert prose-lg max-w-none font-noto">
-                    {parse(displayBody)}
+                    {parse(displayBody, parserOptions)}
                 </div>
             </article>
         </main>

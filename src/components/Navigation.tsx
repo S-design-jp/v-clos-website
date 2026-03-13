@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
-import { useGlobalState } from "@/context/GlobalContext";
 
 const MENU_ITEMS = [
     { label: "TOP", href: "/" },
@@ -20,14 +19,7 @@ export default function Navigation() {
     const router = useRouter();
     const pathname = usePathname();
 
-    const { qualityMode } = useGlobalState();
-
     const toggleMenu = () => setIsOpen(!isOpen);
-
-    const resetQuality = () => {
-        localStorage.removeItem("v-clos-quality");
-        window.location.reload();
-    };
 
     const switchLanguage = (newLocale: string) => {
         if (locale === newLocale) return;
@@ -45,20 +37,18 @@ export default function Navigation() {
         router.refresh();
     };
 
-    if (!qualityMode) return null;
-
     return (
         <>
             <button
                 onClick={toggleMenu}
-                className="fixed top-8 right-8 z-[100] w-12 h-12 flex flex-col items-center justify-center gap-1.5 group mix-blend-difference"
+                className="fixed top-0 right-8 z-[201] h-[8vh] w-12 flex flex-col items-center justify-center gap-1.5 group mix-blend-difference"
             >
                 <div className={`w-8 h-[2px] bg-white transition-all duration-300 ${isOpen ? "rotate-45 translate-y-2" : "group-hover:-translate-y-1"}`} />
                 <div className={`w-8 h-[2px] bg-white transition-all duration-300 ${isOpen ? "opacity-0" : "opacity-100"}`} />
                 <div className={`w-8 h-[2px] bg-white transition-all duration-300 ${isOpen ? "-rotate-45 -translate-y-2" : "group-hover:translate-y-1"}`} />
             </button>
 
-            <div className={`fixed inset-0 z-[90] pointer-events-none overflow-hidden`}>
+            <div className="fixed inset-0 z-[90] pointer-events-none overflow-hidden">
 
                 <div
                     className={`absolute inset-0 bg-black/20 transition-opacity duration-500 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
@@ -66,14 +56,12 @@ export default function Navigation() {
                 />
 
                 <div
-                    className={`absolute top-0 right-0 h-full w-full md:w-[60%] bg-gradient-to-b from-[#4cd8ed]/50 via-[#4cd8ed]/20 to-black/60 backdrop-blur-sm transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? "translate-x-0" : "translate-x-[100%]"
-                        }`}
+                    className={`absolute top-0 right-0 h-full w-full md:w-[60%] bg-gradient-to-b from-[#4cd8ed]/50 via-[#4cd8ed]/20 to-black/60 backdrop-blur-sm transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isOpen ? "translate-x-0" : "translate-x-[100%]"}`}
                     style={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)" }}
                 />
 
                 <div
-                    className={`absolute top-0 right-0 h-full w-[90%] md:w-[55%] bg-black/60 backdrop-blur-xl border-l border-[#4cd8ed]/40 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-[100%] pointer-events-none"
-                        }`}
+                    className={`absolute top-0 right-0 h-full w-[90%] md:w-[55%] bg-black/60 backdrop-blur-xl border-l border-[#4cd8ed]/40 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] delay-100 ${isOpen ? "translate-x-0 pointer-events-auto" : "translate-x-[100%] pointer-events-none"}`}
                     style={{ clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
                 >
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] opacity-20" />
@@ -86,8 +74,7 @@ export default function Navigation() {
                                 key={index}
                                 href={item.href}
                                 onClick={() => setIsOpen(false)}
-                                className={`group relative block w-fit text-2xl md:text-5xl font-jura font-bold tracking-widest text-transparent stroke-text hover:text-white transition-all duration-500 transform ${isOpen ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"
-                                    }`}
+                                className={`group relative block w-fit text-2xl md:text-5xl font-jura font-bold tracking-widest text-transparent stroke-text hover:text-white transition-all duration-500 transform ${isOpen ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
                                 style={{ transitionDelay: `${index * 50 + 200}ms` }}
                             >
                                 <span className="relative z-10 block group-hover:translate-x-4 transition-transform duration-300">
@@ -98,33 +85,19 @@ export default function Navigation() {
                         ))}
 
                         <div
-                            className={`mt-12 pt-8 border-t border-white/10 flex flex-col gap-6 transition-all duration-500 delay-700 ${isOpen ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"
-                                }`}
+                            className={`mt-12 pt-8 border-t border-white/10 flex flex-col gap-6 transition-all duration-500 delay-700 pb-[8vh] ${isOpen ? "translate-x-0 opacity-100" : "translate-x-10 opacity-0"}`}
                         >
-                            <div className="space-y-2">
-                                <p className="text-[10px] font-jura text-gray-500 tracking-widest">SYSTEM SETTINGS</p>
-                                <button
-                                    onClick={resetQuality}
-                                    className="text-xs font-jura tracking-[0.2em] text-[#4cd8ed] hover:text-white transition-colors flex items-center gap-2 group"
-                                >
-                                    <span className="w-2 h-2 bg-[#4cd8ed] rounded-full group-hover:animate-pulse shadow-[0_0_8px_rgba(76,216,237,0.8)]" />
-                                    RESET GRAPHIC QUALITY
-                                </button>
-                            </div>
-
                             <div className="flex items-center gap-6">
                                 <button
                                     onClick={() => switchLanguage('ja')}
-                                    className={`text-sm font-jura tracking-widest transition-colors pb-1 ${locale === 'ja' ? 'text-white border-b border-[#4cd8ed] shadow-[#4cd8ed]' : 'text-gray-500 hover:text-white border-b border-transparent'
-                                        }`}
+                                    className={`text-sm font-jura tracking-widest transition-colors pb-1 ${locale === 'ja' ? 'text-white border-b border-[#4cd8ed]' : 'text-gray-500 hover:text-white border-b border-transparent'}`}
                                 >
                                     JP
                                 </button>
                                 <span className="text-gray-600">/</span>
                                 <button
                                     onClick={() => switchLanguage('en')}
-                                    className={`text-sm font-jura tracking-widest transition-colors pb-1 ${locale === 'en' ? 'text-white border-b border-[#4cd8ed] shadow-[#4cd8ed]' : 'text-gray-500 hover:text-white border-b border-transparent'
-                                        }`}
+                                    className={`text-sm font-jura tracking-widest transition-colors pb-1 ${locale === 'en' ? 'text-white border-b border-[#4cd8ed]' : 'text-gray-500 hover:text-white border-b border-transparent'}`}
                                 >
                                     EN
                                 </button>
@@ -134,7 +107,7 @@ export default function Navigation() {
                     </div>
                 </div>
 
-            </div>
+            </div >
 
             <style jsx>{`
         .stroke-text {
