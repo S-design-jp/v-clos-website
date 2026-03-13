@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getAllNews } from "@/libs/microcms";
-import Scene from "@/components/Scene";
 import TextScramble from "@/components/TextScramble";
 
 export default async function NewsPage({
