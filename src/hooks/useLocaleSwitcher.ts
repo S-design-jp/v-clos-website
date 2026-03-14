@@ -3,6 +3,15 @@
 import { useLocale } from "next-intl";
 import { useRouter, usePathname } from "next/navigation";
 
+/**
+ * useLocaleSwitcher
+ *
+ * Navigation.tsx と LanguageSwitcher.tsx で重複していた
+ * 言語切り替えロジックをカスタムフックとして一元管理する。
+ *
+ * 使い方:
+ *   const { locale, switchLanguage, localizedHref } = useLocaleSwitcher();
+ */
 export function useLocaleSwitcher() {
     const locale = useLocale();
     const router = useRouter();

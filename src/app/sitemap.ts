@@ -26,20 +26,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
 
     const news = await getAllNews();
-    const newsRoutes = news.map((item) => ({
-        url: `${SITE_URL}/news/${item.id}`,
-        lastModified: new Date(item.publishedAt),
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-    }));
+    const newsRoutes = news.flatMap((item) =>
+        locales.map((locale) => ({
+            url: `${SITE_URL}${locale ? `/${locale}` : ""}/news/${item.id}`,
+            lastModified: new Date(item.publishedAt),
+            changeFrequency: "weekly" as const,
+            priority: 0.7,
+        }))
+    );
 
     const events = await getAllEvents();
-    const eventRoutes = events.map((item) => ({
-        url: `${SITE_URL}/events/${item.id}`,
-        lastModified: new Date(item.publishedAt),
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-    }));
+    const eventRoutes = events.flatMap((item) =>
+        locales.map((locale) => ({
+            url: `${SITE_URL}${locale ? `/${locale}` : ""}/events/${item.id}`,
+            lastModified: new Date(item.publishedAt),
+            changeFrequency: "weekly" as const,
+            priority: 0.7,
+        }))
+    );
 
     return [...staticRoutes, ...newsRoutes, ...eventRoutes];
 }

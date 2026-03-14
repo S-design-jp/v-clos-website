@@ -1,16 +1,20 @@
 "use client";
 
+import Image from "next/image";
+
 interface Props {
     imageSrc: string;
 }
-
 export default function StaticImage({ imageSrc }: Props) {
     return (
         <div className="absolute inset-0 z-0">
-            <img
+            <Image
                 src={imageSrc}
                 alt=""
-                className="w-full h-full object-cover opacity-40"
+                fill
+                sizes="100vw"
+                priority
+                className="object-cover opacity-40"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
         </div>

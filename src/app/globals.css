@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* プロジェクト全体の背景色をここで指定しておくと安全です */
+/* プロジェクト全体の背景色 */
 :root {
   background-color: #000000;
   color: #ffffff;
@@ -14,13 +14,22 @@ body {
 
 ::selection {
   background-color: #ffffff;
-  /* 背景を白 */
   color: #000000;
-  /* 文字を黒 */
 }
 
 /* Firefox対応 */
 ::-moz-selection {
   background-color: #ffffff;
   color: #000000;
+}
+
+.nav-stroke-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+}
+
+.nav-stroke-text:hover {
+  color: white;
+  -webkit-text-stroke: 0px transparent;
+  text-shadow: 0 0 20px rgba(76, 216, 237, 0.5);
 }
